@@ -1,4 +1,4 @@
-FullScreenMario
+FullScreenMario (adapted to web mobile)
 ===============
 
 ### ***This code is outdated, poorly written, and due to be phased out within a year. It is kept here for historical purposes only. A new version is under development.***
