@@ -3,6 +3,123 @@
 // "use strict";
 
 // window.data stores the references to data and elements
+
+function applyNewJs() {
+
+  document.body.addEventListener("keydown",function(event) {
+        if ((event.keyCode === 32 || event.keyCode === 38 || event.keyCode === 40) && event.target === document.body) {
+          event.preventDefault();}
+      }, false
+  );
+
+  if (document.getElementById('paused')) {
+    document.getElementById('paused').remove();
+  }
+  if (document.getElementById('mobile-controls')) {
+    document.getElementById('mobile-controls').remove();
+  }
+
+  var paused_el = createElement("div", {id: "paused"});
+  var paused_el_span = createElement('span');
+  paused_el_span.innerText = 'CLICK TO UNPAUSE';
+  paused_el.appendChild(paused_el_span);
+  body.appendChild(paused_el);
+
+  var mobile_controls_el = createElement("div", {id: "mobile-controls"});
+  var move_left_el = createElement("div", {id: "move-left",className:"move"});
+  var move_top_el = createElement("div", {id: "move-top",className:"move"});
+  var move_right_el = createElement("div", {id: "move-right",className:"move"});
+  var move_bottom_el = createElement("div", {id: "move-bottom",className:"move"});
+  var move_fire_el = createElement("div", {id: "move-fire",className:"move"});
+  var move_left_el_span = createElement('span');
+  var move_top_el_span = createElement('span');
+  var move_right_el_span = createElement('span');
+  var move_bottom_el_span = createElement('span');
+  var move_fire_el_span = createElement('span');
+  move_left_el.appendChild(move_left_el_span);
+  move_top_el.appendChild(move_top_el_span);
+  move_right_el.appendChild(move_right_el_span);
+  move_bottom_el.appendChild(move_bottom_el_span);
+  move_fire_el.appendChild(move_fire_el_span);
+  mobile_controls_el.appendChild(move_left_el);
+  mobile_controls_el.appendChild(move_top_el);
+  mobile_controls_el.appendChild(move_right_el);
+  mobile_controls_el.appendChild(move_bottom_el);
+  mobile_controls_el.appendChild(move_fire_el);
+  body.appendChild(mobile_controls_el);
+
+  var move_right = document.getElementById('move-right');
+  var move_left = document.getElementById('move-left');
+  var move_top = document.getElementById('move-top');
+  var move_bottom = document.getElementById('move-bottom');
+  var move_fire = document.getElementById('move-fire');
+
+  move_right.addEventListener("touchstart", function( event ) {
+    event.preventDefault();
+    var keyd = new KeyboardEvent("keydown", {bubbles: true, cancelable: true, keyCode: 68});
+    document.body.dispatchEvent(keyd);
+  });
+  move_right.addEventListener("touchend", function( event ) {
+    event.preventDefault();
+    var keyd = new KeyboardEvent("keyup", {bubbles: true, cancelable: true, keyCode: 68});
+    document.body.dispatchEvent(keyd);
+  });
+
+  move_left.addEventListener("touchstart", function( event ) {
+    event.preventDefault();
+    var keya = new KeyboardEvent("keydown", {bubbles: true, cancelable: true, keyCode: 65});
+    document.body.dispatchEvent(keya);
+  });
+  move_left.addEventListener("touchend", function( event ) {
+    event.preventDefault();
+    var keya = new KeyboardEvent("keyup", {bubbles: true, cancelable: true, keyCode: 65});
+    document.body.dispatchEvent(keya);
+  });
+
+  move_top.addEventListener("touchstart", function( event ) {
+    event.preventDefault();
+    var keyw = new KeyboardEvent("keydown", {bubbles: true, cancelable: true, keyCode: 87});
+    document.body.dispatchEvent(keyw);
+  });
+  move_top.addEventListener("touchend", function( event ) {
+    event.preventDefault();
+    var keyw = new KeyboardEvent("keyup", {bubbles: true, cancelable: true, keyCode: 87});
+    document.body.dispatchEvent(keyw);
+  });
+
+  move_bottom.addEventListener("touchstart", function( event ) {
+    event.preventDefault();
+    var keys = new KeyboardEvent("keydown", {bubbles: true, cancelable: true, keyCode: 83});
+    document.body.dispatchEvent(keys);
+  });
+  move_bottom.addEventListener("touchend", function( event ) {
+    event.preventDefault();
+    var keys = new KeyboardEvent("keyup", {bubbles: true, cancelable: true, keyCode: 83});
+    document.body.dispatchEvent(keys);
+  });
+
+  // move_fire.addEventListener("touchstart", function( event ) {
+  //   event.preventDefault();
+  //   var keys = new KeyboardEvent("keydown", {bubbles: true, cancelable: true, keyCode: 17});
+  //   document.body.dispatchEvent(keys);
+  // });
+  // move_fire.addEventListener("touchend", function( event ) {
+  //   event.preventDefault();
+  //   var keys = new KeyboardEvent("keyup", {bubbles: true, cancelable: true, keyCode: 17});
+  //   document.body.dispatchEvent(keys);
+  // });
+
+  document.getElementById('data_display').style = "width:100%;font-size:13px";
+
+  //document.getElementById('log').innerText = 'applyNewJs');
+
+  // var canvas = document.getElementsByTagName('canvas')[0];
+  // var ctx = canvas.getContext('2d');
+  // ctx.scale(0.8,1);
+
+}
+
+// window.data stores the references to data and elements
 function resetData() {
   // Make sure there's no data display already
   var check;
@@ -52,6 +169,10 @@ function setDataDisplay() {
     updateDataElement(data[elems[i]]);
   }
   body.appendChild(data.display);
+
+  // if (is_mobile) {
+    applyNewJs();
+  // }
 }
 
 // Getting rid of the display simply means removing it from body
