@@ -54,23 +54,23 @@ function applyNewJs() {
   var move_bottom = document.getElementById('move-bottom');
   var move_fire = document.getElementById('move-fire');
 
-  move_right.addEventListener("touchstart", function( event ) {
+  move_right.addEventListener("mousedown", function( event ) {
     event.preventDefault();
     var keyd = new KeyboardEvent("keydown", {bubbles: true, cancelable: true, keyCode: 68});
     document.body.dispatchEvent(keyd);
   });
-  move_right.addEventListener("touchend", function( event ) {
+  move_right.addEventListener("mouseup", function( event ) {
     event.preventDefault();
     var keyd = new KeyboardEvent("keyup", {bubbles: true, cancelable: true, keyCode: 68});
     document.body.dispatchEvent(keyd);
   });
 
-  move_left.addEventListener("touchstart", function( event ) {
+  move_left.addEventListener("mousedown", function( event ) {
     event.preventDefault();
     var keya = new KeyboardEvent("keydown", {bubbles: true, cancelable: true, keyCode: 65});
     document.body.dispatchEvent(keya);
   });
-  move_left.addEventListener("touchend", function( event ) {
+  move_left.addEventListener("mouseup", function( event ) {
     event.preventDefault();
     var keya = new KeyboardEvent("keyup", {bubbles: true, cancelable: true, keyCode: 65});
     document.body.dispatchEvent(keya);
