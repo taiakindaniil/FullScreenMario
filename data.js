@@ -7,9 +7,9 @@
 function applyNewJs() {
 
   document.body.addEventListener("keydown",function(event) {
-        if ((event.keyCode === 32 || event.keyCode === 38 || event.keyCode === 40) && event.target === document.body) {
-          event.preventDefault();}
-      }, false
+    if ((event.keyCode === 32 || event.keyCode === 38 || event.keyCode === 40) && event.target === document.body) {
+      event.preventDefault();}
+    }, false
   );
 
   if (document.getElementById('paused')) {
