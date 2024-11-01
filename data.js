@@ -1,15 +1,11 @@
-/* Data.js */
-// A few functions to store and display ~persistent data
-// "use strict";
-
 // window.data stores the references to data and elements
 
 function applyNewJs() {
 
   document.body.addEventListener("keydown",function(event) {
-    if ((event.keyCode === 32 || event.keyCode === 38 || event.keyCode === 40) && event.target === document.body) {
-      event.preventDefault();}
-    }, false
+        if ((event.keyCode === 32 || event.keyCode === 38 || event.keyCode === 40) && event.target === document.body) {
+          event.preventDefault();}
+      }, false
   );
 
   if (document.getElementById('paused')) {
@@ -54,23 +50,23 @@ function applyNewJs() {
   var move_bottom = document.getElementById('move-bottom');
   var move_fire = document.getElementById('move-fire');
 
-  move_right.addEventListener("mousedown", function( event ) {
+  move_right.addEventListener("touchstart", function( event ) {
     event.preventDefault();
     var keyd = new KeyboardEvent("keydown", {bubbles: true, cancelable: true, keyCode: 68});
     document.body.dispatchEvent(keyd);
   });
-  move_right.addEventListener("mouseup", function( event ) {
+  move_right.addEventListener("touchend", function( event ) {
     event.preventDefault();
     var keyd = new KeyboardEvent("keyup", {bubbles: true, cancelable: true, keyCode: 68});
     document.body.dispatchEvent(keyd);
   });
 
-  move_left.addEventListener("mousedown", function( event ) {
+  move_left.addEventListener("touchstart", function( event ) {
     event.preventDefault();
     var keya = new KeyboardEvent("keydown", {bubbles: true, cancelable: true, keyCode: 65});
     document.body.dispatchEvent(keya);
   });
-  move_left.addEventListener("mouseup", function( event ) {
+  move_left.addEventListener("touchend", function( event ) {
     event.preventDefault();
     var keya = new KeyboardEvent("keyup", {bubbles: true, cancelable: true, keyCode: 65});
     document.body.dispatchEvent(keya);
@@ -98,16 +94,16 @@ function applyNewJs() {
     document.body.dispatchEvent(keys);
   });
 
-  // move_fire.addEventListener("touchstart", function( event ) {
-  //   event.preventDefault();
-  //   var keys = new KeyboardEvent("keydown", {bubbles: true, cancelable: true, keyCode: 17});
-  //   document.body.dispatchEvent(keys);
-  // });
-  // move_fire.addEventListener("touchend", function( event ) {
-  //   event.preventDefault();
-  //   var keys = new KeyboardEvent("keyup", {bubbles: true, cancelable: true, keyCode: 17});
-  //   document.body.dispatchEvent(keys);
-  // });
+  move_fire.addEventListener("touchstart", function( event ) {
+    event.preventDefault();
+    var keys = new KeyboardEvent("keydown", {bubbles: true, cancelable: true, keyCode: 17});
+    document.body.dispatchEvent(keys);
+  });
+  move_fire.addEventListener("touchend", function( event ) {
+    event.preventDefault();
+    var keys = new KeyboardEvent("keyup", {bubbles: true, cancelable: true, keyCode: 17});
+    document.body.dispatchEvent(keys);
+  });
 
   document.getElementById('data_display').style = "width:100%;font-size:13px";
 
@@ -119,13 +115,12 @@ function applyNewJs() {
 
 }
 
-// window.data stores the references to data and elements
 function resetData() {
   // Make sure there's no data display already
   var check;
   if(check = document.getElementById("data_display"))
     body.removeChild(check);
-  
+
   if(!window.data) {
     window.data = new Data();
     // setDataDisplay();
@@ -156,11 +151,11 @@ function DataObject(amount, length, name) {
 // Sets up the data display on the screen
 function setDataDisplay() {
   var display = createElement("table", {
-            id: "data_display",
-            className: "display",
-            style: {
-              width: (gamescreen.right + 14) + "px"
-            }}),
+        id: "data_display",
+        className: "display",
+        style: {
+          width: (gamescreen.right + 14) + "px"
+        }}),
       elems = ["score", "coins", "world", "time", "lives"];
   body.appendChild(display);
   data.display = display;
@@ -170,9 +165,9 @@ function setDataDisplay() {
   }
   body.appendChild(data.display);
 
-  // if (is_mobile) {
+  if (is_mobile) {
     applyNewJs();
-  // }
+  }
 }
 
 // Getting rid of the display simply means removing it from body
@@ -195,7 +190,7 @@ function startDataTime() {
 function updateDataTime(me) {
   // If the time direction isn't up (random map), check for timing
   if(me.dir != 1) {
-    if(me.amount == 100) playCurrentThemeHurry(); 
+    if(me.amount == 100) playCurrentThemeHurry();
     else if(me.amount <= 0) killPlayer(player, true);
   }
   // If time is still enabled, change it by 1
@@ -263,3 +258,4 @@ function storePlayerStats() {
 function clearPlayerStats() {
   data.playerpower = player.power = 1;
 }
+

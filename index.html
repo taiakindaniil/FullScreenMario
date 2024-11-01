@@ -13,7 +13,7 @@
   <link href="default.css" rel="stylesheet">
   <link href="Fonts/stylesheet.css" rel="stylesheet">
 	<script src="ui.js"></script>
-  <style>
+  <!-- <style>
     .mobile-body {
       overflow: hidden;
       height: 100vh;
@@ -34,25 +34,26 @@
       height: calc(100% + 1px);
       background: green;
     }
-  </style>
+  </style> -->
   <style>
-    html, body {margin: 0; overflow: hidden}
+    html, body {margin: 0; overflow: hidden; touch-action: manipulation; }
   </style>
 </head>
 
 <body onload="start()">
   <div id="wrap">
     <div id="content">
-  
-      <!-- Top header -->
-      <!-- <div id="header"> -->
-        <!-- <img id="beta" src="Theme/Beta.png"> -->
-        <!-- <span id="version"></span> -->
-      <!-- </div> -->
       
       <!-- Game itself -->
-      <iframe onload="this.contentWindow.focus()" id="game" style="margin-top: 0; height: 100%;" src="mario.html"></iframe>
+      <iframe onload="this.contentWindow.focus()" id="game" style="margin-top: 0; height: 100%;" src="mobilemario.html"></iframe>
       
+      <script>
+        window.onload = function() {
+          var iframe = document.getElementById('game');
+          iframe.contentWindow.focus();
+        }
+      </script>
+
       <!-- After the game (retracts as needed) -->
       <!-- <div id="after"> -->
       

@@ -29,7 +29,7 @@ function resetTriggers() {
 
     // Depending on the axis used...
     switch(event.axis) {
-      // Left stick, vertical
+        // Left stick, vertical
       case "LEFT_STICK_Y":
       case "RIGHT_STICK_Y":
         // If it actually has a direction, either go up or down
@@ -41,8 +41,8 @@ function resetTriggers() {
           keyup("DPAD_UP");
           keyup("DPAD_DOWN");
         }
-      break;
-      // Left stick, horizontal
+        break;
+        // Left stick, horizontal
       case "LEFT_STICK_X":
       case "RIGHT_STICK_X":
         // If it actually has a direction, either go left or right
@@ -54,7 +54,7 @@ function resetTriggers() {
           keyup("DPAD_UP");
           keyup("DPAD_DOWN");
         }
-      break;
+        break;
     }
   });
 
@@ -62,11 +62,11 @@ function resetTriggers() {
 
   // Set the key events on the body
   proliferate(body, {
-      onkeydown: ControlsPipe("keydown", true),
-      onkeyup: ControlsPipe("keyup", false),
-      oncontextmenu: contextmenu,
-      onmousedown: mousedown
-    });
+    onkeydown: ControlsPipe("keydown", true),
+    onkeyup: ControlsPipe("keyup", false),
+    oncontextmenu: contextmenu,
+    onmousedown: mousedown
+  });
 
   // Set UI triggers
   setMessageTriggers();
@@ -188,14 +188,15 @@ function ControlsPipe(name, strict) {
     if((strict && ((player && player.dead) || window.paused)) || window.nokeys) return;
 
     // Allow this to be used as keyup(37) or keyup({which: 37})
-    if(typeof(event) != "number" || event.which || event.control)
-      event = event.which || event.control;
+    if(typeof(event) != "number" || event.which || event.control || event.keyCode)
+      event = event.which || event.control || event.keyCode;
 
     // If there is a known response to this character code, do it
     if(responses[event])
       responses[event](player.keys);
     // Otherwise only complain if verbosity[name] is true
-    else mlog(name, "Could not", name,  event);
+    else
+      mlog(name, "Could not", name,  event);
 
     // Record this in the history
     window.gamehistory[gamecount] = [keydown, event];
@@ -209,7 +210,7 @@ function keydown(event) {
   if(typeof(event) === "object" || event.which)
     event = event.which;
   if(responses[event])
-      responses[event](player.keys);
+    responses[event](player.keys);
 
   window.gamehistory[gamecount] = [keydown, event];
 }
@@ -221,7 +222,7 @@ function keyup(event) {
   if(typeof(event) === "object" || event.which)
     event = event.which;
   if(responses[event])
-      responses[event](player.keys);
+    responses[event](player.keys);
 
   window.gamehistory[gamecount] = [keyup, event];
 }
@@ -274,8 +275,8 @@ function maxlulz() {
   // window.palette = arrayShuffle(window.palette, 1);
   // clearAllSprites(true);
   TimeHandler.addEventInterval(function(arr) {
-      setAreaSetting(arr[randInt(arr.length)]);
-    }, 7, Infinity, ["Overworld", "Underworld", "Underwater", "Sky", "Castle"]);
+    setAreaSetting(arr[randInt(arr.length)]);
+  }, 7, Infinity, ["Overworld", "Underworld", "Underwater", "Sky", "Castle"]);
 }
 
 //Function to map a new key to a new action
@@ -294,11 +295,11 @@ function mapKeyToControl(action, keyCode) {
   window.controls = new Controls(newPipes);
   //Update the links between events and the game
   proliferate(body, {
-      onkeydown: ControlsPipe("keydown", true),
-      onkeyup: ControlsPipe("keyup", false),
-      oncontextmenu: contextmenu,
-      onmousedown: mousedown
-    });
+    onkeydown: ControlsPipe("keydown", true),
+    onkeyup: ControlsPipe("keyup", false),
+    oncontextmenu: contextmenu,
+    onmousedown: mousedown
+  });
 }
 
 /* Triggers (from a UI)
@@ -314,9 +315,9 @@ function setMessageTriggers() {
       if(window[name]) window[name]();
       else log("Could not toggle", name);
     },
-	setKey: function(data) {
-	  mapKeyToControl(data.action, data.keyCode);
-	}
+    setKey: function(data) {
+      mapKeyToControl(data.action, data.keyCode);
+    }
   };
 
   // When a message is received, send it to the appropriate command code
@@ -339,3 +340,4 @@ function triggerSetMap(data) {
   setMap.apply(this, data.map || []);
   setLives(3);
 }
+

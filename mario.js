@@ -1,6 +1,5 @@
 /* mario.js */
 // Starts everything.
-
 function FullScreenMario() {
   var time_start = Date.now();
 
@@ -16,24 +15,24 @@ function FullScreenMario() {
 
   // Know when to shut up
   window.verbosity = {Maps: false,
-                      Sounds: false,
-                      };
+    Sounds: false,
+  };
 
   window.requestAnimationFrame = window.requestAnimationFrame
-                           || window.mozRequestAnimationFrame
-                           || window.webkitRequestAnimationFrame
-                           || window.msRequestAnimationFrame
-                           || function(func) { setTimeout(func, timer); };
+      || window.mozRequestAnimationFrame
+      || window.webkitRequestAnimationFrame
+      || window.msRequestAnimationFrame
+      || function(func) { setTimeout(func, timer); };
   window.cancelAnimationFrame = window.cancelAnimationFrame
-                           || window.webkitCancelRequestAnimationFrame
-                           || window.mozCancelRequestAnimationFrame
-                           || window.oCancelRequestAnimationFrame
-                           || window.msCancelRequestAnimationFrame
-                           || clearTimeout;
+      || window.webkitCancelRequestAnimationFrame
+      || window.mozCancelRequestAnimationFrame
+      || window.oCancelRequestAnimationFrame
+      || window.msCancelRequestAnimationFrame
+      || clearTimeout;
 
   window.Uint8ClampedArray = window.Uint8ClampedArray
-                          || window.Uint8Array
-                          || Array;
+      || window.Uint8Array
+      || Array;
 
   // Resetting everything may take a while
   resetMeasurements();
@@ -59,13 +58,13 @@ function FullScreenMario() {
 function ensureLocalStorage() {
   var ls_ok = false;
   try {
-  if(!window.hasOwnProperty("localStorage"))
-    window.localStorage = { crappy: true };
+    if(!window.hasOwnProperty("localStorage"))
+      window.localStorage = { crappy: true };
 
-  // Some browsers (mainly IE) won't allow it on a local machine anyway
-  if(window.localStorage) ls_ok = true;
- }
- catch(err) {
+    // Some browsers (mainly IE) won't allow it on a local machine anyway
+    if(window.localStorage) ls_ok = true;
+  }
+  catch(err) {
     ls_ok = false;
   }
   if(!ls_ok) {
@@ -154,6 +153,7 @@ function resetEvents() {
 function resetSounds() {
   window.sounds = {};
   window.theme = false;
+  window.muted = (localStorage && localStorage.muted == "true");
 
   window.AudioPlayer = new AudioPlayr({
     directory: "Sounds",
@@ -230,7 +230,7 @@ function resetGameState(nocount) {
   // Also reset data
   resetData();
   window.nokeys = window.spawning = window.spawnon =
-    window.notime = window.editing = window.qcount = window.lastscroll = 0;
+      window.notime = window.editing = window.qcount = window.lastscroll = 0;
   window.paused = window.gameon = window.speed = 1;
   // Shifting location shouldn't wipe the gamecount (for key histories)
   if(!nocount) window.gamecount = 0;
@@ -260,7 +260,7 @@ function scrollWindow(x, y) {
 }
 function shiftAll(stuff, x, y) {
   for(var i = stuff.length - 1; i >= 0; --i)
-      shiftBoth(stuff[i], x, y);
+    shiftBoth(stuff[i], x, y);
 }
 function shiftElements(stuff, x, y) {
   for(var i = stuff.length - 1, elem; i >= 0; --i) {
@@ -287,3 +287,4 @@ function mlog(type) {
     log.apply(console, arguments);
   }
 }
+

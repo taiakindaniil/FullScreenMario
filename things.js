@@ -11,7 +11,7 @@
 function Thing(type) {
   // If there isn't a type, don't do anything
   if(arguments.length == 0 || !type) return;
-  
+
   // Otherwise make this based off the type
   // Make sure this is legally created
   var self = this === window ? new Thing() : this,
@@ -24,32 +24,32 @@ function Thing(type) {
   self.yvel = this.yvel || 0;
   if(self.tolx == null) self.tolx = 0;
   if(self.toly == null) self.toly = unitsized8;
-  
+
   self.collide = self.collide || function() {}; // To do: why does taking this out mess things up?
   self.death = self.death || killNormal;
   self.animate = self.animate || emergeUp;
-  
+
   var maxquads = 4, num;
   if((num = floor(self.width * unitsize / QuadsKeeper.getQuadWidth())) > 0)
     maxquads += ((num + 1) * maxquads / 2);
   if((num = floor(self.height * unitsize / QuadsKeeper.getQuadHeight())) > 0)
     maxquads += ((num + 1) * maxquads / 2);
   self.maxquads = maxquads;
-  
+
   self.quadrants = new Array(self.maxquads)
   self.overlaps = [];
-  
+
   self.title = self.title || type.name;
   self.spritewidth = self.spritewidth || self.width;
   self.spriteheight = self.spriteheight || self.height;
   self.sprite = "";
-  
+
   try { setContextStuff(self, self.spritewidth, self.spriteheight); }
   catch(err) {
     log("Thing context fail", err, self.title, self);
     setTimeout(function() { setContextStuff(self, self.spritewidth, self.spriteheight); }, 1);
   }
-  
+
   return self;
 }
 
@@ -126,7 +126,7 @@ function addText(html, left, top) {
   var element = createElement("div", {innerHTML: html, className: "text",
     left: left,
     top: top,
-    onclick: body.onclick || canvas.onclick, 
+    onclick: body.onclick || canvas.onclick,
     style: {
       marginLeft: left + "px",
       marginTop: top + "px"
@@ -163,7 +163,7 @@ function checkTexts() {
 /*
  * Characters (except player, who has his own .js)
  */
- 
+
 
 /*
  * Items
@@ -179,7 +179,7 @@ function Mushroom(me, type) {
   me.jump = mushroomJump;
   me.death = killNormal;
   me.nofire = true;
-  
+
   var name = "mushroom";
   switch(type) {
     case 1: me.action = gainLife; name += " gainlife"; break;
@@ -284,10 +284,10 @@ function Shell(me, smart) {
 function hitShell(one, two) {
   // Assuming two is shell
   if(one.type == "shell" && two.type != one.type) return hitShell(two, one);
-  
+
   switch(one.type) {
-    // Hitting a wall
-    case "solid": 
+      // Hitting a wall
+    case "solid":
       if(two.right < one.right) {
         AudioPlayer.playLocal("Bump", one.left);
         setRight(two, one.left);
@@ -299,19 +299,19 @@ function hitShell(one, two) {
         two.xvel = two.speed;
         two.moveleft = false;
       }
-    break;
-    
-    // Hitting Player
+      break;
+
+      // Hitting Player
     case "player":
       var shelltoleft = objectToLeft(two, one),
           playerjump = one.yvel > 0 && one.bottom <= two.top + unitsizet2;
-      
+
       // Star Player is pretty easy
       if(one.star) {
         scorePlayerShell(one, two);
         return two.death(two, 2);
       }
-      
+
       // If the shell is already being landed on by Player:
       if(two.landing) {
         // If the recorded landing direction hasn't changed:
@@ -330,7 +330,7 @@ function hitShell(one, two) {
         }
         return;
       }
-      
+
       // Player is kicking the shell (either hitting a still shell or jumping onto a shell)
       if(two.xvel == 0 || playerjump) {
         // Player has has hit the shell in a dominant matter. You go, Player!
@@ -343,7 +343,7 @@ function hitShell(one, two) {
           two.height -= unitsized8;
           updateSize(two);
         }
-        
+
         // If the shell's xvel is 0 (standing still)
         if(two.xvel == 0) {
           if(shelltoleft) {
@@ -359,7 +359,7 @@ function hitShell(one, two) {
         }
         // Otherwise set the xvel to 0
         else two.xvel = 0;
-        
+
         // Player is landing on the shell (movements, xvels already set)
         if(playerjump) {
           AudioPlayer.play("Kick");
@@ -385,9 +385,9 @@ function hitShell(one, two) {
         if(!two.hitcount && ((shelltoleft && two.xvel < 0) || (!shelltoleft && two.xvel > 0)))
           one.death(one);
       }
-    break;
-    
-    // Shell hitting another shell
+      break;
+
+      // Shell hitting another shell
     case "shell":
       // If one is moving...
       if(one.xvel != 0) {
@@ -408,8 +408,8 @@ function hitShell(one, two) {
         score(one, 500);
         one.death(one);
       }
-    break;
-    
+      break;
+
     default:
       switch(one.group) {
         case "enemy":
@@ -424,29 +424,29 @@ function hitShell(one, two) {
               killNormal(one);
             } // Otherwise just kill it normally
             else killFlip(one);
-            
+
             AudioPlayer.play("Kick");
             score(one, findScore(two.enemyhitcount), true);
             ++two.enemyhitcount;
           } // Otherwise the enemy just turns around
           else one.moveleft = objectToLeft(one, two);
-        break;
-        
+          break;
+
         case "item":
           if(one.type == "shell") {
             if(two.xvel) killFlip(one);
             if(one.xvel) killFlip(two);
           }
           else return;
-        break;
+          break;
       }
-    break;
+      break;
   }
 }
 function moveShell(me) {
   if(me.xvel != 0) return;
-  
-  if(++me.counting == 350) { 
+
+  if(++me.counting == 350) {
     addClass(me, "peeking");
     me.peeking = true;
     me.height += unitsized8;
@@ -520,7 +520,7 @@ function Koopa(me, smart, fly) {
   me.moveleft = me.skipoverlaps = true;
   me.group = "enemy";
   me.smart = smart; // will it run off the edge
-  var name = "koopa"; 
+  var name = "koopa";
   name += (me.smart ? " smart" : " dumb");
   if(me.smart) name+= " smart";
   if(fly) {
@@ -546,7 +546,7 @@ function Koopa(me, smart, fly) {
     else me.movement = moveSimple;
   }
   me.collide = collideEnemy;
-  me.death = killKoopa; 
+  me.death = killKoopa;
   setCharacter(me, name);
   TimeHandler.addSpriteCycleSynched(me, ["one", "two"]);
   me.toly = unitsizet2;
@@ -559,12 +559,12 @@ function killKoopa(me, big) {
   else spawn = new Thing(Shell, me.smart);
   // Puts it on stack, so it executes immediately after upkeep
   TimeHandler.addEvent(
-    function(spawn, me) { 
-      addThing(spawn, me.left, me.bottom - spawn.height * unitsize);
-      spawn.moveleft = me.moveleft;
-    },
-    0,
-    spawn, me
+      function(spawn, me) {
+        addThing(spawn, me.left, me.bottom - spawn.height * unitsize);
+        spawn.moveleft = me.moveleft;
+      },
+      0,
+      spawn, me
   );
   killNormal(me);
   if(big == 2) killFlip(spawn);
@@ -602,7 +602,7 @@ function movePirhanaNew(me, amount) {
   me.counter += amount;
   shiftVert(me, amount);
   shiftVert(me.visual_scenery, amount);
-  
+
   // Height is 0
   if(me.counter <= 0 || me.counter >= me.countermax) {
     me.movement = false;
@@ -636,17 +636,17 @@ function playerAboveEnemy(player, enemy) {
 function collideEnemy(one, two) {
   // Check for life
   if(!characterIsAlive(one) || !characterIsAlive(two)) return;
-  
+
   // Check for nocollidechar
   if((one.nocollidechar && !two.player) || (two.nocollidechar && !one.player)) return;
-  
+
   // Items
   if(one.group == "item") {
     if(one.collide_primary) return one.collide(two, one);
     // if(two.height < unitsized16 || two.width < unitsized16) return;
     return;
   }
-  
+
   // Player on top of enemy
   if(!map.underwater && one.player && ((one.star && !two.nostar) || (!two.deadly && objectOnTop(one, two)))) {
     // Enforces toly
@@ -670,15 +670,15 @@ function collideEnemy(one, two) {
     one.hopping = true;
     if(player.power == 1)  setPlayerSizeSmall(one);
   }
-  
+
   // Player getting hit by an enemy
   else if(one.player) {
     if(!playerAboveEnemy(one, two)) one.death(one);
   }
-  
+
   // Two regular characters colliding
   else two.moveleft = !(one.moveleft = objectToLeft(one, two));
-}  
+}
 
 function Podoboo(me, jumpheight) {
   me.width = 7;
@@ -690,7 +690,7 @@ function Podoboo(me, jumpheight) {
   me.movement = movePodobooInit;
   me.collide = collideEnemy;
   me.betweentime = 70;
-  
+
   setCharacter(me, "podoboo");
 }
 function movePodobooInit(me) {
@@ -709,7 +709,7 @@ function podobooJump(me) {
   me.yvel = me.speed + me.gravity;
   me.movement = movePodobooUp;
   me.hidden = false;
-  
+
   // Sadly, this appears to be occasionally necessary
   setThingSprite(me);
 }
@@ -750,10 +750,10 @@ function HammerBro(me) {
 function moveHammerBro(me) {
   // Slide side to side
   me.xvel = Math.sin(Math.PI * (me.counter += .007)) / 2.1;
-  
+
   // Make him turn to look at player if needed
   lookTowardPlayer(me);
-  
+
   // If falling, don't collide with solids
   me.nocollidesolid = me.yvel < 0 || me.falling;
 }
@@ -815,19 +815,19 @@ function Cannon(me, height, nofire) {
 }
 function moveCannonInit(me) {
   TimeHandler.addEventInterval(
-    function(me) {
-      if(player.right > me.left - unitsizet8 && player.left < me.right + unitsizet8)
-        return; // don't fire if Player is too close
-      var spawn = new Thing(BulletBill);
-      if(objectToLeft(player, me)) {
-        addThing(spawn, me.left, me.top);
-        spawn.direction = spawn.moveleft = true;
-        spawn.xvel *= -1;
-        flipHoriz(spawn);
-      }
-      else addThing(spawn, me.left + me.width, me.top);
-      AudioPlayer.playLocal("Bump", me.right);
-    }, 270, Infinity, me);
+      function(me) {
+        if(player.right > me.left - unitsizet8 && player.left < me.right + unitsizet8)
+          return; // don't fire if Player is too close
+        var spawn = new Thing(BulletBill);
+        if(objectToLeft(player, me)) {
+          addThing(spawn, me.left, me.top);
+          spawn.direction = spawn.moveleft = true;
+          spawn.xvel *= -1;
+          flipHoriz(spawn);
+        }
+        else addThing(spawn, me.left + me.width, me.top);
+        AudioPlayer.playLocal("Bump", me.right);
+      }, 270, Infinity, me);
   me.movement = false;
 }
 function BulletBill(me) {
@@ -906,7 +906,7 @@ function killBowser(me, big) {
     me.nofall = false;
     return killFlip(me);
   }
-  
+
   if(++me.deathcount == 5) {
     me.yvel = me.speed = me.movement = 0;
     killFlip(me, 350);
@@ -978,7 +978,7 @@ function moveBlooper(me) {
   if(me.squeeze) me.yvel = max(me.yvel + .021, .7); // going down
   else me.yvel = min(me.yvel - .035, -.7); // going up
   shiftVert(me, me.yvel, true);
-  
+
   if(!me.squeeze) {
     if(player.left > me.right + unitsizet8) {
       // Go to the right
@@ -1012,18 +1012,18 @@ function CheepCheep(me, red, jumping) {
   me.width = me.height = 8;
   me.group = "enemy";
   var name = "cheepcheep " + (red ? "red" : "");
-  
+
   // Doubled for fun! (also editor checking)
   me.red = red;
   setCheepVelocities(me);
-  
+
   if(jumping) {
     name += " jumping";
     me.jumping = true;
     me.movement = moveCheepJumping;
-  } 
+  }
   else me.movement = moveCheepInit;
-  
+
   me.nofall = me.nocollidesolid = me.nocollidechar = true;
   me.death = killFlip;
   me.collide = collideEnemy;
@@ -1053,18 +1053,18 @@ function moveCheepJumping(me) {
 }
 function startCheepSpawn() {
   return map.zone_cheeps = TimeHandler.addEventInterval(
-    function() {
-      if(!map.zone_cheeps) return true;
-      var spawn = new Thing(CheepCheep, true, true);
-      addThing(spawn, Math.random() * player.left * player.maxspeed / unitsized2, gamescreen.height * unitsize);
-      spawn.xvel = Math.random() * player.maxspeed;
-      spawn.yvel = unitsize * -2.33;
-      flipHoriz(spawn);
-      spawn.movement = function(me) {
-        if(me.top < ceilmax) me.movement = moveCheepJumping; 
-        else shiftVert(me, me.yvel);
-      };
-    }, 21, Infinity
+      function() {
+        if(!map.zone_cheeps) return true;
+        var spawn = new Thing(CheepCheep, true, true);
+        addThing(spawn, Math.random() * player.left * player.maxspeed / unitsized2, gamescreen.height * unitsize);
+        spawn.xvel = Math.random() * player.maxspeed;
+        spawn.yvel = unitsize * -2.33;
+        flipHoriz(spawn);
+        spawn.movement = function(me) {
+          if(me.top < ceilmax) me.movement = moveCheepJumping;
+          else shiftVert(me, me.yvel);
+        };
+      }, 21, Infinity
   );
 }
 
@@ -1204,12 +1204,12 @@ function killBeetle(me, big) {
   else spawn = new Thing(BeetleShell, me.smart);
   // Puts it on stack, so it executes immediately after upkeep
   TimeHandler.addEvent(
-    function(spawn, me) {
-      addThing(spawn, me.left, me.bottom - spawn.height * unitsize);
-      spawn.moveleft = me.moveleft;
-    },
-    0,
-    spawn, me
+      function(spawn, me) {
+        addThing(spawn, me.left, me.bottom - spawn.height * unitsize);
+        spawn.moveleft = me.moveleft;
+      },
+      0,
+      spawn, me
   );
   killNormal(me);
   if(big == 2) killFlip(spawn);
@@ -1268,7 +1268,7 @@ function coinEmerge(me, solid) {
   score(me, 200, false);
   gainCoin();
   me.nocollide = me.alive = me.nofall = me.emerging = true;
-  
+
   if(me.blockparent) me.movement = coinEmergeMoveParent;
   else me.movement = coinEmergeMove;
   me.yvel = -unitsize;
@@ -1286,8 +1286,8 @@ function coinEmergeMovement(me, solid) {
   if(!me.alive) return true;
   shiftVert(me, me.yvel);
   // if(solid && solid.alive && me.bottom > solid.bottom || me.top > solid.top) {
-    // killNormal(me);
-    // return true;
+  // killNormal(me);
+  // return true;
   // }
 }
 
@@ -1302,7 +1302,7 @@ function coinEmergeMoveParent(me) {
 /*
  * Player
  */
- function Player(me) {
+function Player(me) {
   setPlayerSizeSmall(me);
   me.walkspeed = unitsized2;
   me.canjump = me.nofiredeath = me.nofire = me.player = me.nokillend = 1;
@@ -1322,7 +1322,7 @@ function coinEmergeMoveParent(me) {
   if(map.underwater) {
     me.swimming = true;
     TimeHandler.addSpriteCycle(me, ["swim1", "swim2"], "swimming", 5);
-  }  
+  }
 }
 
 function placePlayer(xloc, yloc) {
@@ -1360,7 +1360,7 @@ function thingStoreVelocity(me, keepmove) {
   me.nofallOld = me.nofall || false;
   me.nocollideOld = me.nocollide || false;
   me.movementOld = me.movement || me.movementOld;
-  
+
   me.nofall = me.nocollide = true;
   me.xvel = me.yvel = false;
   if(!keepmove) me.movement = false;
@@ -1410,10 +1410,10 @@ function playerGetsBig(me, noanim) {
     var stages = [1,2,1,2,3,2,3];
     for(var i = stages.length - 1; i >= 0; --i)
       stages[i] = "shrooming" + stages[i];
-    
+
     // Clear Player's movements
     thingStoreVelocity(player);
-    
+
     // The last event in stages clears it, resets Player's movements, and stops
     stages.push(function(me, settings) {
       me.shrooming = settings.length = 0;
@@ -1422,7 +1422,7 @@ function playerGetsBig(me, noanim) {
       thingRetrieveVelocity(player);
       return true;
     });
-    
+
     TimeHandler.addSpriteCycle(me, stages, "shrooming", 6);
   }
   else addClass(me, "large");
@@ -1474,7 +1474,7 @@ function setPlayerSizeLarge(me) {
 function movePlayer(me) {
   // Not jumping
   if(!me.keys.up) me.keys.jump = 0;
-  
+
   // Jumping
   else if(me.keys.jump > 0 && (me.yvel <= 0 || map.underwater) ) {
     if(map.underwater) playerPaddles(me);
@@ -1494,7 +1494,7 @@ function movePlayer(me) {
       me.yvel = max(me.yvel - dy, map.maxyvelinv);
     }
   }
-  
+
   // Crouching
   if(me.keys.crouch && !me.crouching && me.resting) {
     if(me.power != 1) {
@@ -1510,7 +1510,7 @@ function movePlayer(me) {
     if(me.resting.actionTop)
       me.resting.actionTop(me, me.resting, me.resting.transport);
   }
-  
+
   // Running
   var decel = 0 ; // (how much to decrease)
   // If a button is pressed, hold/increase speed
@@ -1545,13 +1545,13 @@ function movePlayer(me) {
   if(me.xvel > decel) me.xvel-=decel;
   else if(me.xvel < -decel) me.xvel+=decel;
   else if(me.xvel!=0) {
-	me.xvel = 0;
-	if(!window.nokeys && me.keys.run==0) {
+    me.xvel = 0;
+    if(!window.nokeys && me.keys.run==0) {
       if(me.keys.left_down)me.keys.run=-1;
       else if(me.keys.right_down)me.keys.run=1;
-    }  
+    }
   }
-  
+
   // Movement mods
   // Slowing down
   if(Math.abs(me.xvel) < .14) {
@@ -1584,7 +1584,7 @@ function movePlayer(me) {
       me.moveleft = true;
     }
   }
-  
+
   // Resting stops a bunch of other stuff
   if(me.resting) {
     // Hopping
@@ -1647,7 +1647,7 @@ function movePlayerVine(me) {
       shiftHoriz(me, me.keys.run, true);
     return unattachPlayer(me);
   }
-  
+
   // If Player is moving up, simply move up
   if(me.keys.up) {
     me.animatednow = true;
@@ -1660,15 +1660,15 @@ function movePlayerVine(me) {
     if(me.bottom > attached.bottom - unitsizet4) return unattachPlayer(me);
   }
   else me.animatednow = false;
-  
+
   if(me.animatednow && !me.animated) {
     addClass(me, "animated");
   } else if(!me.animatednow && me.animated) {
     removeClass(me, "animated");
   }
-  
+
   me.animated = me.animatednow;
-  
+
   if(me.bottom < -16) { // ceilmax (104) - ceillev (88)
     locMovePreparations(me);
     if(!attached.locnum && map.random) goToTransport(["Random", "Sky", "Vine"]);
@@ -1687,7 +1687,7 @@ function unattachPlayer(me) {
 function playerHopsOff(me, solid, addrun) {
   removeClasses(me, "climbing running");
   addClass(me, "jumping");
-  
+
   me.piping = me.nocollide = me.nofall = me.climbing = false;
   me.gravity = gravity / 4;
   me.xvel = 3.5;
@@ -1702,7 +1702,7 @@ function playerHopsOff(me, solid, addrun) {
       playerStartRunningCycle(me);
     }
   }, 21, me);
-  
+
 }
 
 function playerFires() {
@@ -1785,7 +1785,7 @@ function killPlayer(me, big) {
   me.nocollide = me.nomove = nokeys = 1;
   --data.lives.amount;
   if(!map.random) data.score.amount = data.scoreold;
-  
+
   // If it's in editor, (almost) immediately set map
   if(window.editing) {
     setTimeout(function() {
@@ -1799,15 +1799,15 @@ function killPlayer(me, big) {
   }
   // Otherwise it's random; spawn him again
   else {
-      nokeys = notime = false;
-      updateDataElement(data.score);
-      updateDataElement(data.lives);
-      // placePlayer(unitsizet16, unitsizet8 * -1 + (map.underwater * unitsize * 24));
-      TimeHandler.addEvent(function() {
-        playerDropsIn();
-        AudioPlayer.playTheme();
+    nokeys = notime = false;
+    updateDataElement(data.score);
+    updateDataElement(data.lives);
+    // placePlayer(unitsizet16, unitsizet8 * -1 + (map.underwater * unitsize * 24));
+    TimeHandler.addEvent(function() {
+      playerDropsIn();
+      AudioPlayer.playTheme();
       // }, 7 * (map.respawndist || 17));
-      }, 117);
+    }, 117);
   }
 }
 // Used by random maps to respawn
@@ -1816,11 +1816,11 @@ function playerDropsIn() {
   clearOldPlayer();
   placePlayer(unitsizet16, unitsizet8 * -1 + (map.underwater * unitsize * 24));
   flicker(player);
-  
+
   // Give a Resting Stone for him to land, unless it's underwater...
   if(!map.underwater) {
     player.nocollide = true;
-    
+
     TimeHandler.addEvent(function() {
       player.nocollide = false;
       addThing(new Thing(RestingStone), player.left, player.bottom + player.yvel);
@@ -1836,18 +1836,18 @@ function gameOver() {
   pause();
   AudioPlayer.pauseTheme();
   AudioPlayer.play("Game Over");
-  
+
   var innerHTML = "<div style='font-size:49px;padding-top: " + (innerHeight / 2 - 28/*49*/) + "px'>GAME OVER</div>";
   // innerHTML += "<p style='font-size:14px;opacity:.49;width:490px;margin:auto;margin-top:49px;'>";
   // innerHTML += "You have run out of lives. Maybe you're not ready for playing real games...";
   innerHTML += "</p>";
-  
+
   body.className = "Night"; // to make it black
   body.innerHTML = innerHTML;
-  
+
   window.gamecount = Infinity;
   clearPlayerStats();
-  
+
   setTimeout(gameRestart, 7000);
 }
 
@@ -1908,30 +1908,30 @@ function brickBump(me, character) {
   me.up = character;
   if(character.power > 1 && !me.contents)
     return TimeHandler.addEvent(brickBreak, 2, me, character); // wait until after collision testing to delete (for coins)
-  
+
   // Move the brick
   blockBumpMovement(me);
-  
+
   // If the brick has contents,
   if(me.contents) {
     // Turn normal Mushrooms into FireFlowers if Player is large
     if(player.power > 1 && me.contents[0] == Mushroom && !me.contents[1]) me.contents[0] = FireFlower;
     TimeHandler.addEvent(
-      function(me) {
-        var contents = me.contents,
-            out = new Thing(contents[0], contents[1], contents[2]);
-        addThing(out, me.left, me.top);
-        setMidXObj(out, me, true);
-        out.blockparent = me;
-        out.animate(out, me);
-        // Do special preps for coins
-        if(me.contents[0] == Coin) {
-          if(me.lastcoin) makeUsedBlock(me);
-          TimeHandler.addEvent( function(me) { me.lastcoin = true; }, 245, me );
-        } else makeUsedBlock(me);
-      }, 
-      7,
-      me
+        function(me) {
+          var contents = me.contents,
+              out = new Thing(contents[0], contents[1], contents[2]);
+          addThing(out, me.left, me.top);
+          setMidXObj(out, me, true);
+          out.blockparent = me;
+          out.animate(out, me);
+          // Do special preps for coins
+          if(me.contents[0] == Coin) {
+            if(me.lastcoin) makeUsedBlock(me);
+            TimeHandler.addEvent( function(me) { me.lastcoin = true; }, 245, me );
+          } else makeUsedBlock(me);
+        },
+        7,
+        me
     );
   }
 }
@@ -1950,8 +1950,8 @@ function placeShards(me) {
   for(var i = 0, shard; i < 4; ++i) {
     shard = new Thing(BrickShard);
     addThing(shard,
-                me.left + (i < 2) * me.width * unitsize - unitsizet2,
-                me.top + (i % 2) * me.height * unitsize - unitsizet2);
+        me.left + (i < 2) * me.width * unitsize - unitsizet2,
+        me.top + (i % 2) * me.height * unitsize - unitsizet2);
     shard.xvel = unitsized2 - unitsize * (i > 1);
     shard.yvel = unitsize * -1.4 + i % 2;
     TimeHandler.addEvent(killNormal, 350, shard);
@@ -2079,7 +2079,7 @@ function vineMovement(me) {
 function touchVine(me, vine) {
   if(!me.player || me.attached || me.climbing || me.bottom > vine.bottom + unitsizet2) return;
   vine.attached = me;
-  
+
   me.attached = vine;
   me.nofall = me.skipoverlaps = true;
   me.xvel = me.yvel = me.resting = me.jumping = me.jumpcount = me.running = 0;
@@ -2088,7 +2088,7 @@ function touchVine(me, vine) {
   me.movementsave = me.movement;
   me.movement = movePlayerVine;
   me.keys = new Keys();
-  
+
   // Reset classes to be in vine mode
   TimeHandler.clearClassCycle(me, "running");
   removeClass(me, "running skidding");
@@ -2097,12 +2097,12 @@ function touchVine(me, vine) {
   addClass(me, "climbing");
   // setSize(me, 7, 8, true);
   me.climbing = TimeHandler.addSpriteCycle(me, ["one", "two"], "climbing");
-  
+
   // Make sure you're looking at the vine, and from the right distance
   lookTowardThing(me, vine);
   if(!me.attachleft) setRight(me, vine.left + unitsizet4);
   else setLeft(me, vine.right - unitsizet4);
-  
+
 }
 
 function Springboard(me) {
@@ -2141,11 +2141,11 @@ function movePlayerSpringDown(me) {
   // Make sure it's hard to slide off
   if(me.left < me.spring.left + unitsizet2 || me.right > me.spring.right - unitsizet2)
     me.xvel /= 1.4;
-  
+
   reduceSpringHeight(me.spring, me.spring.tension);
   setBottom(me, me.spring.top, true);
   me.spring.tension /= 2;
-  
+
   updateSize(me.spring);
 }
 function movePlayerSpringUp(me) {
@@ -2158,9 +2158,9 @@ function movePlayerSpringUp(me) {
 function moveSpringUp(spring) {
   reduceSpringHeight(spring, -spring.tension);
   spring.tension *= 2;
-  if(spring == player.spring) 
+  if(spring == player.spring)
     setBottom(player, spring.top, true);
-  
+
   if(spring.height > spring.heightnorm) {
     if(spring == player.spring) {
       player.yvel = max(-unitsizet2, spring.tensionsave * -.98);
@@ -2200,7 +2200,7 @@ function RestingStoneUnused(me) {
   removeClass(me, "hidden");
   setThingSprite(player);
 }
-function RestingStoneUsed(me) { 
+function RestingStoneUsed(me) {
   if(!player.resting) return killNormal(me);
 }
 
@@ -2223,7 +2223,7 @@ function CastleBlock(me, arg1, arg2) {
   }
   // Otherwise it's invisible
   else setSolid(me, "castleblockinvis");
-  
+
   // Since there are fireballs, set that stuff
   if(length) {
     me.balls = new Array(length);
@@ -2291,9 +2291,9 @@ function CastleAxe(me) {
 function CastleAxeFalls(me, collider) {
   var axe = collider.axe;
   // Don't do this if Player would fall without the bridge
-  if(!me.player || 
-    me.right < axe.left + unitsize ||
-    me.bottom > axe.bottom - unitsize) return;
+  if(!me.player ||
+      me.right < axe.left + unitsize ||
+      me.bottom > axe.bottom - unitsize) return;
   // Immediately kill the axe and collider
   killNormal(axe);
   killNormal(collider);
@@ -2355,7 +2355,7 @@ function collideCastleNPC(me, collider) {
       TimeHandler.addEvent(proliferate, i * 70, text[i].element, {style: {visibility: "visible"}});
     TimeHandler.addEvent(endLevel, (i + 3) * 70);
   }, 21, collider.text);
-} 
+}
 
 function TreeTop(me, width) {
   // Tree trunks are scenery
@@ -2452,7 +2452,7 @@ function Scale(me, width, settings) {
   me.width = width * 4;
   me.spritewidth = me.spriteheight = 5;
   me.repeat = me.nocollide = true;
-  
+
   setSolid(me, "scale");
 }
 
@@ -2491,11 +2491,11 @@ function FlagCollision(me, detector) {
   window.detector = detector;
   AudioPlayer.pause();
   AudioPlayer.play("Flagpole");
-  
+
   // Reset and clear most stuff, including killing all other characters
   killOtherCharacters();
   nokeys = notime = player.nofall = 1;
-  
+
   // Mostly clear player, and set him to the pole's left
   player.xvel = player.yvel = player.keys.up = player.keys.jump = map.canscroll = map.ending = player.movement = 0;
   player.nocollidechar = true;
@@ -2505,7 +2505,7 @@ function FlagCollision(me, detector) {
   updateSize(me);
   TimeHandler.addSpriteCycle(me, ["one", "two"], "climbing");
   playerRemoveStar(player); // just in case
-  
+
   // Start the movement
   var mebot = false,
       flagbot = false,
@@ -2575,12 +2575,12 @@ function FlagOff(me, pole) {
 // Me === Player
 function endLevelPoints(me, detector) {
   if(!me || !me.player) return;
-  
+
   // Stop the game, and get rid of player and the detectors
   notime = nokeys = true;
   killNormal(detector);
   killNormal(me);
-  
+
   // Determine the number of fireballs (1, 3, and 6 become not 0)
   var numfire = parseInt(getLast(String(data.time.amount)));
   if(!(numfire == 1 || numfire == 3 || numfire == 6)) numfire = 0;
@@ -2612,10 +2612,10 @@ function endLevelFireworks(me, numfire, detector) {
     nextnum = timer * (i + 2) * 42;
   }
   else nextnum = 0;
-  
+
   // The actual endLevel happens after all the fireworks are done
   nextfunc = function() { setTimeout(function() { endLevel(); }, nextnum); };
-  
+
   // If the Stage Clear sound is still playing, wait for it to finish
   AudioPlayer.addEventImmediate("Stage Clear", "ended", function() { TimeHandler.addEvent(nextfunc, 35); });
 }
@@ -2632,7 +2632,7 @@ function Firework(me, num) {
   // Number is >0 if this is ending of level
   if(num)
     switch(num) {
-      // These probably aren't the exact same as original... :(
+        // These probably aren't the exact same as original... :(
       case 1: me.locs = [unitsizet16, unitsizet16]; break;
       case 2: me.locs = [-unitsizet16, unitsizet16]; break;
       case 3: me.locs = [unitsizet16 * 2, unitsizet16 * 2]; break;
@@ -2681,10 +2681,10 @@ function WarpWorld(me) {
 }
 
 function setWarpWorldInit(me) {
-  // Just reduces the size 
+  // Just reduces the size
   shiftHoriz(me, me.width * unitsized2);
   me.width /= 2;
-  updateSize(me); 
+  updateSize(me);
   me.movement = false;
 }
 
@@ -2732,11 +2732,11 @@ function resetScenery() {
       "ShroomTrunk": [8, 8],
       "String": [1, 1],
       "TreeTrunk": [8, 8],
-      "Water": { 
-          0: 4,
-          1: 5,
-          spriteCycle: ["one", "two", "three", "four"]
-        },
+      "Water": {
+        0: 4,
+        1: 5,
+        spriteCycle: ["one", "two", "three", "four"]
+      },
       "WaterFill": [4, 5]
     },
     // Patterns of scenery that can be placed in one call
@@ -2841,7 +2841,7 @@ function resetScenery() {
       ]
     }
   };
-  
+
   processSceneryPatterns(Scenery.patterns);
 }
 
@@ -2876,7 +2876,7 @@ function Sprite(me, name, reps) {
     log("No sprite template found for", name);
     return;
   }
-  // Sizing is gotten from the listing under setScenery 
+  // Sizing is gotten from the listing under setScenery
   me.width = (me.spritewidth = template[0]) * (reps[0] || 1);
   me.height = (me.spriteheight = template[1]) * (reps[1] || 1);
   me.unitwidth = me.spritewidth * unitsize;
@@ -2885,7 +2885,7 @@ function Sprite(me, name, reps) {
   me.repeat = true;
   setScenery(me, "scenery " + name);
   me.title = name;
-  
+
   // If the listing has a SpriteCycle, do that
   if(template.spriteCycleTimer) TimeHandler.addSpriteCycle(me, spriteCycleTimer, spriteCycleTimer || undefined)
 }
@@ -2903,11 +2903,11 @@ function LocationShifter(me, loc, size) {
 function collideLocationShifter(me, shifter) {
   if(!me.player) return;
   shifter.nocollide = player.piping = true;
-  TimeHandler.addEvent( 
-    function(me) {
-      shiftToLocation(shifter.loc);
-      if(map.random) entryRandom(me);
-    }, 1, me );
+  TimeHandler.addEvent(
+      function(me) {
+        shiftToLocation(shifter.loc);
+        if(map.random) entryRandom(me);
+      }, 1, me );
 }
 
 function ScrollBlocker(me, big) {
@@ -3034,3 +3034,4 @@ function Collider(me, size, funcs) {
   setSolid(me, "collider blue " + me.func.name);
   me.hidden = true;
 }
+

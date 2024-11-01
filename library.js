@@ -11,15 +11,15 @@
   a single digit each (instead of two).
   Furthermore, when a color is repeated multiple times, the sprite     !!!!!!!
   uses the x symbol to signify a repeat: x07, repeats 0 seven times.
-  
+
   This custom sprite syntax is used for the purpose of native filters
   on colors. Many Mario sprites have multiple versions (eg. Overworld
   vs Underworld for Goombas, Bricks, etc.). Directly manipulating the
   color codes allows for the color mapping located in window.filters.
-  
+
   In order to support advanced commands like filtering and copying, a
   post-processor was implemented: see evaluatePost() for a listing of
-  the available commands. 
+  the available commands.
   'same' directly copies another sprite's data.
   'filter' directly copies another sprite's data, but filters it with
            one of the window.filter filters.
@@ -59,10 +59,10 @@ function resetLibrary() {
     [0,130,0,255],
 
   ];
-  
+
   // This starts off at 2
   window.digitsize = getDigitSize(palette);
-  
+
   // Commonly used filters (placed in the library after parsing)
   window.filters = {
     Underworld: ["palette", {"05": "18", "09": "16"}],
@@ -77,7 +77,7 @@ function resetLibrary() {
     },
     smart: ["palette", {"14": "08"}]
   }
-  
+
   // Yup.
   window.library = {
     rawsprites: {
@@ -552,9 +552,9 @@ function resetLibrary() {
         },
         BridgeBase: "p[0,2,5,8]111000112221012222x35,222x35,222x35,222x35,22221012211100011",
         Cannon: ["multiple", "vertical", {
-            top: "p[0,2,5,9]222x010,2222111x210,11222x110,x26,1x213,111x210,112x112,2112x112,2112x112,2112x15,22221112112111121111311211211121122113121121112121131312112111212113131211211121133113221122212x16,3122221102x16,302110002x18,3x06,2x18,3x05,2x110,300002x110,3000211x38,1130021333222233313021133x26,3313021133232232331132113233223323113211323322332311321132332233231132113x28,3113211333233233311321133322223331132111x38,11132x114,3",
-            middle: "p[2,5,9]1x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,2"
-          }],
+          top: "p[0,2,5,9]222x010,2222111x210,11222x110,x26,1x213,111x210,112x112,2112x112,2112x112,2112x15,22221112112111121111311211211121122113121121112121131312112111212113131211211121133113221122212x16,3122221102x16,302110002x18,3x06,2x18,3x05,2x110,300002x110,3000211x38,1130021333222233313021133x26,3313021133232232331132113233223323113211323322332311321132332233231132113x28,3113211333233233311321133322223331132111x38,11132x114,3",
+          middle: "p[2,5,9]1x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,21x014,2"
+        }],
         CastleAxe: "p[0,2,4,6,8]003x010,3000323300420033130032333322333313032x35,42x35,1332x35,42x35,1332x35,42x35,1332x35,42x35,1332x35,42x35,130323333423333130002330042000313000300002200003x09,42x014,22x014,42x014,22x014,42x07,",
         CastleBlock: "p[0,4,9]0x114,01x214,1121x210,1211x214,11x214,11x214,11x214,11x214,11x214,11x214,11x214,11x214,11x214,1121x210,1211x214,10x114,0",
         CastleBridge: "p[1,2,4,8]10001000100010001000100010001000122212223222322232223222322232223222322232223222322232221222122213331333133313331333133313331333",
@@ -802,13 +802,13 @@ function libraryParse(setref) {
   for(i in setref) {
     objref = setref[i];
     switch(objref.constructor) {
-      // If it's a string, parse it (unless it's a normal setter)
+        // If it's a string, parse it (unless it's a normal setter)
       case String:
-          setnew[i] = spriteGetArray(spriteExpand(spriteUnravel(objref)));
-      break;
-      // // If it's an array, it should have a command such as 'same' to be post-processed
+        setnew[i] = spriteGetArray(spriteExpand(spriteUnravel(objref)));
+        break;
+        // // If it's an array, it should have a command such as 'same' to be post-processed
       case Array: library.posts.push({caller: setnew, name: i, command: setref[i]}); break;
-      // If it's an object, recurse
+        // If it's an object, recurse
       case Object: setnew[i] = libraryParse(objref); break;
     }
   }
@@ -830,24 +830,24 @@ function libraryPosts() {
 }
 function evaluatePost(caller, command, i) {
   switch(command[0]) {
-    // Same: just returns a reference to the target
-    // ["same", ["container", "path", "to", "target"]]
+      // Same: just returns a reference to the target
+      // ["same", ["container", "path", "to", "target"]]
     case "same":
       return followPath(library.sprites, command[1], 0);
-    
-    // Filter: takes a reference to the target, and applies a filter to it
-    // ["filter", ["container", "path", "to", "target"], filters.DoThisFilter]
+
+      // Filter: takes a reference to the target, and applies a filter to it
+      // ["filter", ["container", "path", "to", "target"], filters.DoThisFilter]
     case "filter":
       var ref = followPath(library.rawsprites, command[1], 0),
           filter = command[2];
       return applyLibraryFilter(ref, filter, i);
-    
-    // Multiple: uses more than one image, either vertically or horizontally
-    // Not to be confused with having .repeat = true.
-    // ["multiple", "vertical", {
-    //    top: "...",       // (just once at the top)
-    //    middle: "..."     // (repeated after top)
-    //  }
+
+      // Multiple: uses more than one image, either vertically or horizontally
+      // Not to be confused with having .repeat = true.
+      // ["multiple", "vertical", {
+      //    top: "...",       // (just once at the top)
+      //    middle: "..."     // (repeated after top)
+      //  }
     case "multiple":
       return evaluatePostMultiple(command);
   }
@@ -869,13 +869,13 @@ function applyPaletteFilterRecursive(ref, filter) {
   for(i in ref) {
     found = ref[i];
     switch(found.constructor) {
-      case String: 
+      case String:
         // if(i != "normal" || stringIsSprite(found)) obj[i] = spriteGetArray(spriteExpand(applyPaletteFilter(spriteUnravel(found), filter)));
         obj[i] = spriteGetArray(spriteExpand(applyPaletteFilter(spriteUnravel(found), filter)));
-      break;
+        break;
       case Object:
         obj[i] = applyPaletteFilterRecursive(found, filter);
-      break;
+        break;
     }
   }
   return obj;
@@ -919,3 +919,4 @@ function SpriteMultiple(type) {
 function getDigitSize(palette) {
   return Number(String(palette.length).length);
 }
+

@@ -14,26 +14,26 @@
 function loadEditor(noreset) {
   // Make sure there aren't any other instances of this
   editorClose();
-  
+
   // If you want to clear the current map
   if(!noreset) {
     window.canedit = true;
     setMap(["Special", "Blank"]);
     window.canedit = false;
   }
-  
+
   // Set the library and controls
   setEditorLibrary();
   setEditorHTML();
   setEditorControls();
   setEditorTriggers();
   setEditorLocalRetrieval();
-  
+
   // Visually update
   classAdd(body, "editor");
   classAdd(editor.sidebar, "expanded");
   TimeHandler.addEvent(classRemove, 35, editor.sidebar, "expanded");
-  
+
   // Let the rest of the game know what's going on
   map.shifting = false;
   window.editing = true;
@@ -109,7 +109,7 @@ function setEditorLibrary() {
       }
     },
     solids: {
-      Floor: { 
+      Floor: {
         arguments: { width: 8 },
         mydefaults: { width: 8 },
         prefunc_custom: function(prestatement, placer, reference, args) {
@@ -126,7 +126,7 @@ function setEditorLibrary() {
           var output = [],
               content = pairs.contents;
           output.push(window[pairs.contents]);
-          
+
           return output;
         },
         prefunc_custom: function(prestatement, placer, reference, args) {
@@ -148,7 +148,7 @@ function setEditorLibrary() {
               content = pairs.contents;
           if(content == "1Up Mushroom") output.push([Mushroom, 1]);
           else output.push(window[pairs.contents]);
-          
+
           if(pairs.hidden == "True") {
             TimeHandler.addEvent(function() { editor.follower.hidden = true; });
             output.push(1);
@@ -160,7 +160,7 @@ function setEditorLibrary() {
               contents = placer.contents,
               contained = contents[0].name;
           output += prestatement.xloc + ", " + prestatement.yloc;
-          
+
           // If it's got unusal contents, mark them
           if(contained != "Coin") {
             // Contents are generally just the function name (Coins by default), with 1Up and Death mushrooms being the exception
@@ -170,10 +170,10 @@ function setEditorLibrary() {
             else output += ", " + contained;
             // Hidden is simply a bool
             if(placer.hidden) output += ", true";
-          } 
+          }
           // Otherwise only add more if it's hidden
           else if(placer.hidden) output += ", false, true";
-          
+
           return output;
         }
       },
@@ -251,7 +251,7 @@ function setEditorLibrary() {
           switch(movement) {
             case moveFalling: output += ", moveFalling"; break;
             case moveFloating: output += ", [moveFloating, 8, 72]"; break;
-            case moveSliding: 
+            case moveSliding:
               var xloc = prestatement.xloc || 0;
               output += ", [moveSliding";
               output += ", " + (xloc - 24);
@@ -293,7 +293,7 @@ function setEditorLibrary() {
       }
     }
   };
-  
+
   // Unfilled required properties are placed here
   var load_paths = {},
       defaults = editor.defaults,
@@ -308,7 +308,7 @@ function setEditorLibrary() {
       proliferate(me, editor.defaults, true);
     }
   }
-  
+
   // Note that everything in scenery is actually pushPreScenery(name, ...)
   group = editor.scenery;
   for(i in group) {
@@ -333,7 +333,7 @@ function setEditorHTML() {
   createEditorSidebar();
   createEditorBottomBar();
   createEditorScrollers();
-  
+
   // Set the bottom bar initially
   editor.sectionselect.onchange();
 }
@@ -359,7 +359,7 @@ function createEditorSidebar() {
         className: "options big"
       }),
       i;
-  
+
   // Dat element structure
   sidebar.appendChild(category);
   category.appendChild(sectionselect);
@@ -369,7 +369,7 @@ function createEditorSidebar() {
     }));
   }
   sidebar.appendChild(options);
-  
+
   // With it initially set, add the sidebar
   body.appendChild(window.sidebar = sidebar);
 }
@@ -380,7 +380,7 @@ function createEditorBottomBar() {
     id: "bottombar",
     things: {}
   });
-  
+
   sidebar.appendChild(bar);
 }
 
@@ -389,7 +389,7 @@ function createEditorScrollers() {
   var names = ["right", "left"],
       scrollers = {},
       name, i, parent, div, top;
-  
+
   // Set the parent #scrollers to hold them
   parent = createElement("div", {
     id: "scrollers",
@@ -398,7 +398,7 @@ function createEditorScrollers() {
       width: (innerWidth - 32) + "px"
     }
   });
-  
+
   // Create the two scrollers
   settings = {
     className: "scroller",
@@ -411,7 +411,7 @@ function createEditorScrollers() {
     onmousedown: editorScrollingStart,
     onmouseup: editorScrollingStop
   };
-  
+
   // Create each div
   for(i = names.length - 1; i >= 0; --i) {
     name = names[i];
@@ -430,9 +430,9 @@ function createEditorScrollers() {
     style: { right: "21px" },
     dx: 7
   });
-  
+
   editor.scrollers = scrollers;
-  
+
   body.appendChild(parent);
 }
 
@@ -471,20 +471,20 @@ function editorScrolling(dx) {
 // Guidelines display helpful boundaries
 function createEditorGuideLines() {
   var lines = {
-      floor: 0,
-      ceiling: ceillev,
-      jumplev1: jumplev1,
-      jumplev2: jumplev2
-    },
-    left = 16 * unitsize + "px",
-    floor = map.floor,
-    i, parent, line;
-  
+        floor: 0,
+        ceiling: ceillev,
+        jumplev1: jumplev1,
+        jumplev2: jumplev2
+      },
+      left = 16 * unitsize + "px",
+      floor = map.floor,
+      i, parent, line;
+
   // The parent holds them and provides the marginLeft
   window.maplines = parent = document.createElement("div");
   parent.style.marginLeft = left;
   parent.id = "maplines";
-  
+
   // Create each line and put it in the parent
   for(i in lines) {
     line = createElement("div", {
@@ -509,10 +509,10 @@ function setEditorControls(names) {
       container = createElement("div", {id: "controls"}),
       controls = editor.controls = {container: container},
       name, div, i;
-  
+
   // Clear anything previously existing
   if(previous) previous.innerHTML = "";
-  
+
   // For each name, add a div
   for(i in names) {
     name = names[i];
@@ -524,11 +524,11 @@ function setEditorControls(names) {
       innerHTML: "<div class='controltext'>" + name + "</div>",
       onclick: editorClickControl
     });
-    
+
     container.appendChild(div);
     controls[name] = div;
   }
-  
+
   sidebar.appendChild(container);
 }
 
@@ -541,7 +541,7 @@ function setEditorTriggers() {
     me = activators[i];
     me.onclick = editorMouseClick;
   }
-  
+
   // Make sure the follower's position is updated!
   document.onmousemove = editorFollowerFollowsCursor;
 }
@@ -550,27 +550,27 @@ function setEditorTriggers() {
 function editorMouseClick(event) {
   if(!window.editing || editor.clicking) return;
   editorPreventClicks();
-  
+
   // If erasing, do that instead
   if(editor.erasing) return editorPlaceEraser(event);
-  
+
   // Don't do anything if you're in settings, or just clicked a control
   if(editor.in_settings || !editor.canplace) return;
-  
+
   var section_name = editor.section_name,
       current_section = window[section_name],
       thing_name = editor.current_selected,
       follower_old = editor.follower;
-  
+
   // Record this past follower in editor.placed
   editor.placed.push(follower_old);
-  
+
   // To visualize, simply unattach the follower from the editor and make a new one
   editor.follower = false;
   editorSetCurrentThingFromName(null, true);
   // (when paused, this doesn't happen otherwise)
   if(paused) refillCanvas();
-  
+
   // No more follower manipulation is needed, because each Thing stores its own arguments
   // Enabling .was_follower lets the eventual save function know this is a key Thing
   follower_old.was_follower = true;
@@ -600,7 +600,7 @@ function editorSetSection(name, nothing) {
       canv_sel, canv,
       first, name;
   editor.section_name = name;
-  
+
   // Clear and reset the bottom bar
   bottombar.innerHTML = "";
   if(!nothing) {
@@ -648,33 +648,33 @@ function editorAddBottomPreview(bottombar, name, ref) {
       sizeheight = height * unitsizet2,
       context = canvas.getContext("2d"),
       csource;
-  
+
   // For superior sharpness
   canvasDisableSmoothing(canvas);
-  
+
   // Update it visually
   editor.bottombar.things[name] = canvas.thing = thing;
   addClass(thing, "editor"); // Ones that need to know this is different get that here
-  
+
   // Know where to take from (multiple sprites need to be specified)
   csource = thing.canvas;
   if(thing.canvases) csource = thing.canvases[ref.sprite_source || "middle"].canvas;
-  
+
   // If there's a previewsize, pattern it on the canvas
   if(ref.previewsize) {
     context.fillStyle = context.createPattern(csource, "repeat");
     context.fillRect(0, 0, sizewidth, sizeheight);
-  } 
+  }
   // Otherwise just draw it normally...
   else {
     context.drawImage(csource, 0, 0, sizewidth, sizeheight);
   }
-  
+
   // Add the canvas to the holder, which is added to bottom bar
   holder.appendChild(holder.canvas = canvas);
   bottombar.appendChild(holder);
   bottombar[name] = holder;
-  
+
   // Return the canvas (the last one will be set as the current)
   return canvas;
 }
@@ -684,27 +684,27 @@ function editorSetSectionSettings() {
   var settings = editor.settings,
       html = "<table>",
       rows;
-  
+
   html += "<h3 class='title'>Settings</h3>";
-  
+
   // Add the options, some of which are non-standard
   html += addArgumentOption("night", Boolean, settings.night);
   html += addArgumentOption("setting", ["Overworld", "Underworld", "Underwater", "Castle", "Sky"], settings.setting);
   html += addArgumentOption("alt", Boolean, settings.alt);
   html += "</table>";
-  
+
   // Apply this to options
   options.innerHTML = html;
-  
+
   // Make these valid, and call the setting supdate function
   ensureOptionsAboveZero(editorUpdateSettingsOption);
-  
+
   // Knowing these options, reference them
   rows = editor.sidebar.getElementsByTagName("table")[0].rows;
   editor.settings.night_elem = rows[0].cells[1].firstChild;
   editor.settings.setting_elem = rows[1].cells[1].firstChild;
   editor.settings.alt_elem = rows[2].cells[1].firstChild;
-  
+
   // There's no follower here
   if(editor.follower) killNormal(editor.follower);
   editor.follower = false;
@@ -745,25 +745,25 @@ function updateCurrentArguments(name, reference) {
   var options = editor.options,
       html = "<table>",
       mydefaults = reference.mydefaults || {},
-      arguments = reference.arguments || {},
+      args = reference.arguments || {},
       i;
-  
+
   // Add this thing's name
   html += "<h3 class='title'>" + name + "</h3>";
-  
+
   // Size must be there, with or without the arguments
-  if(!arguments.width) html += addStaticOption("width", reference.width);
-  if(!arguments.height) html += addStaticOption("height", reference.height);
-  
+  if(!args.width) html += addStaticOption("width", reference.width);
+  if(!args.height) html += addStaticOption("height", reference.height);
+
   // Add any other arguments
-  for(i in arguments) {
-    html += addArgumentOption(i.replace("_", "-"), arguments[i], null, mydefaults);
+  for(i in args) {
+    html += addArgumentOption(i.replace("_", "-"), args[i], null, mydefaults);
   }
-  
+
   // Submit the HTML
   html += "</table>";
   options.innerHTML = html;
-  
+
   ensureOptionsAboveZero();
 }
 // An option that can't be changed
@@ -775,16 +775,16 @@ function addStaticOption(name, value) {
 function addArgumentOption(name, value, ref, mydefaults) {
   mydefaults = mydefaults || {};
   var text =  "<tr name='" + name + "' id='option_" + name + "'><td>" + name + ": </td><td>";
-  
+
   switch(value) {
     case Infinity: text += "Inf"; break;
     case Boolean:
       text += "<select name='" + name + "' value='" + (value ? "true" : "false") + "'><option>False</option><option>True</select>";
-    break;
+      break;
     case Number:
       text += "<input name='" + name + "' value='" + String(value || 0) + "' type='Number'>";
-    break;
-    default: 
+      break;
+    default:
       switch(typeof(value)) {
         case "number": text += "<span class='optspan'>" + value + "x</span><input name='" + name + "' type='Number' class='text' value='" + (mydefaults[name] || 1) + "'>"; break;
         case "string": text += "<input name='" + name + "' type='text' class='text wide' value='" + value + "'>"; break;
@@ -792,9 +792,9 @@ function addArgumentOption(name, value, ref, mydefaults) {
           text += "<select name='" + name + "'>";
           for(i in value) text += "<option>" + value[i] + "</option>";
           text += "<select>";
-        break;
+          break;
       }
-    break;
+      break;
   }
   return text + "</td></tr>";
 }
@@ -809,7 +809,7 @@ function ensureOptionsAboveZero(updatefunc) {
     element = elements[i];
     element.onchange = element.onclick = element.onkeypress = editorInputEnsureAboveZero;
   }
-  
+
   // Select elements also need to update the follower on change
   elements = options.getElementsByTagName("select");
   for(i = elements.length - 1; i >= 0; --i) {
@@ -820,10 +820,10 @@ function ensureOptionsAboveZero(updatefunc) {
 
 function editorInputEnsureAboveZero(event) {
   // var me = event.target,
-      // min = editor.current_thing.minimum || 0,
-      // value = me.value = Number(me.value) || min;
+  // min = editor.current_thing.minimum || 0,
+  // value = me.value = Number(me.value) || min;
   // setTimeout(function() { if(value < me.min) me.value = min; }, 35);
-  
+
   editorUpdateFollower(event);
 }
 
@@ -831,16 +831,16 @@ function editorInputEnsureAboveZero(event) {
 function editorUpdateFollower(event) {
   // If settings are chosen, do that instead
   if(editor.in_settings) return editorUpdateSettingsOption(event);
-  
+
   var current_thing = editor.current_thing,
-      args, follower; 
-  
+      args, follower;
+
   // If there's already one, kill it
   if(follower = editor.follower) {
     follower.id = "";
     killNormal(follower);
   }
-  
+
   // If it has its own function (e.g. a Sprite currier), use that
   if(current_thing.createfunc) {
     follower = current_thing.createfunc(editor.current_thing, editorGetArguments());
@@ -849,9 +849,9 @@ function editorUpdateFollower(event) {
   else follower = ThingCreate(
       window[editor.current_thing_name],
       current_thing.followerUpdate(editor.current_thing, editorGetArguments())
-    );
+  );
   // Arguments set things such as size and adding
-    
+
   editor.follower = follower;
   // Also give it things like the CSS ID and the onclick
   proliferate(follower, {
@@ -862,18 +862,18 @@ function editorUpdateFollower(event) {
     reference: current_thing,
     onclick: editorMouseClick
   }, true);
-  
+
   // Add it, and give it the 'editor' class
   addThing(follower);
   addClass(follower, "editor");
-  
+
   // Don't let it do anything, unless this is a live run-through!
   thingRetrieveVelocity(follower);
   thingStoreVelocity(follower);
-  
+
   // Make sure it has a position
   editorSetFollowerPosition(follower);
-  
+
   // Hide it if there's it's eraser
   if(editor.erasing) follower.hidden = true;
 }
@@ -882,7 +882,7 @@ function editorGetArguments() {
   var inputs = arrayMake(editor.options.getElementsByTagName("input")),
       selects = arrayMake(editor.options.getElementsByTagName("select")),
       combined = inputs.concat(selects);
-      pairs = generateInputNameValuePairs(combined);
+  pairs = generateInputNameValuePairs(combined);
   return pairs;
 }
 function generateInputNameValuePairs(inputs) {
@@ -899,16 +899,16 @@ function editorFollowerFollowsCursor(event) {
   if(!follower) return;
   var xloc = roundFollowerDigit(event.x) + (editor.current_thing.widthoff - editor.offset.x) * unitsize,
       yloc = roundFollowerDigit(event.y) + editor.current_thing.heightoff * unitsize;
-  
+
   editorSetFollowerPosition(follower, xloc, yloc);
 }
 function editorSetFollowerPosition(follower, xloc, yloc) {
   xloc = xloc || editor.xloc_old || 0;
   yloc = yloc || editor.yloc_old || 0;
-  
+
   setLeft(follower, xloc);
   setTop(follower, yloc);
-  
+
   editor.xloc_old = xloc;
   editor.yloc_old = yloc;
 }
@@ -918,17 +918,17 @@ function roundFollowerDigit(num) {
   // var diff = 4;
   var diff = editor.section_name == "solids" ? 8 : 4;
   // switch(editor.section_name) {
-    // case "solids": diff = 8; break;
-    // case "characters": diff = 4; break;
-    // case "scenery": diff = 2; break;
+  // case "solids": diff = 8; break;
+  // case "characters": diff = 4; break;
+  // case "scenery": diff = 2; break;
   // }
   return unitsize * diff * round(num / (unitsize * diff));
 }
 function roundFollowerPosition(me, num) {
-  editorSetFollowerPosition(me, 
+  editorSetFollowerPosition(me,
       roundFollowerDigit(me.left),
       roundFollowerDigit(me.top)
-    );
+  );
 }
 
 /* Follower Update Methods */
@@ -941,7 +941,7 @@ function editorFollowerUpdateStandard(reference, pairs) {
     // This is an event because these are set before the new follower is made
     TimeHandler.addEvent(function() { editor.follower.hidden = true; });
   }
-  
+
   // More importantly, check for width and height
   var output = [];
   if(pairs.width) output.push(Number(pairs.width));
@@ -975,10 +975,10 @@ function editorClickOff() {
 function editorControlUndo() {
   var placed = editor.placed,
       last = placed.pop();
-  
+
   if(last && !last.player) {
     killNormal(last);
-  }  
+  }
 }
 
 // Continuously undos until placed is empty
@@ -986,20 +986,20 @@ function editorControlReset() {
   var placed = editor.placed,
       len = placed.length,
       timer = roundDigit(35 / len, 21);
-  
+
   TimeHandler.addEventInterval(editorControlUndo, timer, len);
 }
 
 // Creates the function and displays the submission window to the user
 function editorControlSave() {
   // if(editor.playing || editor.placed.length == 0) return;
-  
+
   // Display the input/submission window to the user
   var rawfunc = editor.rawfunc = editorGetRawFunc(),
       title = "<span style='font-size:1.4em;'>Hit Submit below to start playing!</span>",
       p = "<p style='font-size:.7em;line-height:140%'>This map will be resumed automatically the next time you use the editor on this computer.<br>Alternately, you may copy this text to work on again later using Load (the button next to Save). </p>",
       menu = editorCreateInputWindow(title + "<br>" + p, rawfunc, editorSubmitGameFuncPlay);
-  
+
   return rawfunc;
 }
 
@@ -1016,51 +1016,51 @@ function editorGetRawFunc() {
       // Using the simple Function constructor, the map is the first argument
       rawfunc = "  var map = arguments[0] || new Map();\n",
       i;
-  
+
   // Start the raw func off with the time, location, and area
   rawfunc += "\n  map.time = " + data.time.amount + ";";
   rawfunc += "\n  map.locs = [ new Location(0, true) ];";
   rawfunc += "\n  map.areas = [";
   rawfunc += "\n    new Area('" + area.setting + "', function() {";
   rawfunc += "\n      setLocationGeneration(0);\n\n";
-  
+
   // Generate the pre-statements based on what's placed
   for(i = lenm1; i >= 0; --i) {
     // Manipulations are done by the editorPreStatement object
     statements[i] = new editorPreStatement(placed[i]);
   }
-  
+
   // Sort the pre-statements, for cleanliness
   statements.sort(prethingsorter);
-  
+
   // With them sorted, turn them all into strings (with the 6 spaces in front)
   for(i = lenm1; i >= 0; --i) {
     // Manipulations are done by the editorPreStatement object
     statements[i] = "      " + statements[i].statement;
   }
-  
+
   // So that annoying loading glitch doesn't happen
   statements = removeDuplicates(statements);
-  
+
   // Add these statements to the raw function
   rawfunc += statements.join("\n");
-  
+
   // Finish off the area function
   rawfunc += "\n    })";
   rawfunc += "\n  ];";
   rawfunc += "\n  return map;"
-  
+
   return rawfunc;
 }
 
 // Generates a prestatement based off a placed object
 function editorPreStatement(placer) {
   this.placer = placer;
-  
+
   // Positioning is important
   this.xloc = (gamescreen.left + placer.left) / unitsize;
   this.yloc = map.floor - placer.top / unitsize;
-  
+
   // Reference and arguments are used to make the statement
   // Using them, get the statement
   this.statement = editorGetStatement(this, placer, placer.reference, placer.args);
@@ -1074,12 +1074,12 @@ function editorGetStatement(prestatement, placer, reference, args) {
     // If it's still not there, ignore this thing (like ScrollBlocker)
     if(!reference) return "";
   }
-  
+
   // The statement always starts with the reference's pre-function
   var statement = (reference.prefunc || pushPreThing).name,
       numargs = args.length,
       argstrings, arg;
-  
+
   // If it has a custom prefunction creator (like scenery), do that
   if(reference.prefunc_custom) {
     statement += "(" + reference.prefunc_custom(prestatement, placer, reference, args) + ");";
@@ -1087,15 +1087,15 @@ function editorGetStatement(prestatement, placer, reference, args) {
   // Otherwise generate the arguments
   else {
     argstrings = [];
-    
+
     // Unless reference specifies not to, add the placer's title
     if(!reference.prefunc_solo) argstrings.push(placer.title);
     // else argstrings.push(placer.prefunc);
-    
+
     // Start the argstrings off with the xloc and yloc
     argstrings.push(String(prestatement.xloc));
     argstrings.push(String(prestatement.yloc));
-  
+
     // For each argument (0 is the thing, so 1 onward), add it to the array of strings
     for(var i = 1; i < numargs; ++i) {
       // Add it, giving the thing apostrophes if needed
@@ -1108,11 +1108,11 @@ function editorGetStatement(prestatement, placer, reference, args) {
       if(typeof(arg) != "undefined")
         argstrings.push(arg);
     }
-  
+
     // Make the statement use the arguments, joined by commas
     statement += "(" + argstrings.join(", ") + ");";
   }
-  
+
   return statement;
 }
 
@@ -1145,9 +1145,9 @@ function Eraser(me) {
 function eraserErases(me) {
   if(!window.editor) return;
   var placed = editor.placed,
-      arr = placed.concat(solids).concat(characters).concat(scenery), 
+      arr = placed.concat(solids).concat(characters).concat(scenery),
       other, i;
-  
+
   // If this touches anything in placed
   for(i = arr.length - 1; i >= 0; --i) {
     other = arr[i];
@@ -1161,7 +1161,7 @@ function eraserErases(me) {
       break;
     }
   }
-  
+
   // ...and finally, kill me
   killNormal(me);
 }
@@ -1182,7 +1182,7 @@ function addThingsToPlaced() {
   placed.sort(prethingsorter);
   // (don't include player in this)
   placed.splice(placed.indexOf(player), 1);
-  
+
   // Make the new placed all know their reference
   for(i = placed.length - 1; i >= 0; --i) {
     placer = placed[i];
@@ -1217,17 +1217,17 @@ function editorCreateInputWindow(blurb, value, callback) {
         innerText: "Cancel",
         onclick: editorCloseInputWindow
       });
-  
+
   // Add them to each other, and the body
   div.appendChild(input);
   div.appendChild(submit);
   div.appendChild(cancel);
   body.appendChild(div);
-  
+
   // Remove the follower
   killNormal(editor.follower = false);
   editor.follower = false;
-  
+
   return div;
 }
 
@@ -1235,40 +1235,40 @@ function editorCloseInputWindow(noedit) {
   editorPreventClicks();
   // Delete the input window
   removeChildSafe(window.input_window, body);
-  
+
   if(!noedit) {
     // Recreate the current thing
     editorSetCurrentThingFromName();
-    
+
     // Pretty sure this is necessary.
     window.editing = true;
   }
-  
+
   editorUpdateFollower();
 }
 
 // It's as if it never happened.
 function editorClose(inmap) {
   if(!window.editor) return;
-  
+
   // Clear any visual changes
   classRemove(body, "editor");
   classRemove(body, "erasing");
-  
+
   // Remove the follower
   // if(window.editor) {
-    killNormal(editor.follower);
-    editor.follower = false;
-    delete window.editor;
+  killNormal(editor.follower);
+  editor.follower = false;
+  delete window.editor;
   // }
-  
+
   // Remove the editor elements (safely)
   var ids = ["maplines", "sidebar", "bottombar", "scrollers"], i;
   for(i in ids) removeChildSafe(document.getElementById(ids[i]), body);
-  
+
   // Stop the mouse triggers
   document.onmousemove = null;
-  
+
   window.editing = false;
   // Unless this is being called by setMap, stop shifting
   if(inmap && window.map) map.shifting = false;
@@ -1277,10 +1277,10 @@ function editorClose(inmap) {
 // Called by scrollWindow while editing to update the follower
 function scrollEditor(xinv, yinv) {
   if(!window.editor) return;
-  
+
   var follower = editor.follower;
   if(!follower) return;
-  
+
   xinv = xinv || 0;
   yinv = yinv || 0;
   // shiftBoth(follower, xinv, yinv);
@@ -1308,7 +1308,7 @@ function setEditorLocalRetrieval() {
 function editorSubmitGameFunc() {
   // If there's no raw function known, don't do anything
   if(!window.editor || !editor.rawfunc) return loadEditor();
-  
+
   var rawfunc = editor.rawfunc,
       mapfunc = window.custommapfunc = new Function(editor.rawfunc);
 
@@ -1317,11 +1317,11 @@ function editorSubmitGameFunc() {
   window.canedit = true;
   setMap(["Custom", "Map"]);
   window.canedit = editor.playing = false;
-  
-  // Load player and all things 
+
+  // Load player and all things
   entryBlank(player);
   addThingsToPlaced();
-  
+
   // Save and close
   editorStoreLocally();
   editorCloseInputWindow();
@@ -1339,7 +1339,7 @@ function editorSubmitLoad() {
   if(!window.editor || !editor.window_input) return;
   editorPreventClicks();
   var rawfunc = editor.window_input.value;
-  loadEditor(); 
+  loadEditor();
   editor.rawfunc = rawfunc;
   editorSubmitGameFunc();
 }
@@ -1374,7 +1374,7 @@ function setEditorLocalRetrieval() {
   editor.rawfunc = found;
   editorSubmitGameFunc();
   editorStoreLocally();
-  
+
   // For each thing now placed:
   var placed = editor.placed, i;
   for(i in placed) {
@@ -1382,3 +1382,4 @@ function setEditorLocalRetrieval() {
     thingStoreVelocity(placed[i]);
   }
 }
+

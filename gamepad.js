@@ -171,21 +171,21 @@
 		return 'WebKit';
 	},
 
-	/**
-	 * @method getType()
-	 * @return {String} 'WebKit'
-	 */
-	WebKitPlatform.prototype.getType = function() {
-		return WebKitPlatform.getType();
-	},
+		/**
+		 * @method getType()
+		 * @return {String} 'WebKit'
+		 */
+		WebKitPlatform.prototype.getType = function() {
+			return WebKitPlatform.getType();
+		},
 
-	/**
-	 * @method isSupported
-	 * @return {Boolean} true
-	 */
-	WebKitPlatform.prototype.isSupported = function() {
-		return true;
-	};
+		/**
+		 * @method isSupported
+		 * @return {Boolean} true
+		 */
+		WebKitPlatform.prototype.isSupported = function() {
+			return true;
+		};
 
 	/**
 	 * Queries the currently connected gamepads and reports any changes.
@@ -259,21 +259,21 @@
 		return 'Firefox';
 	},
 
-	/**
-	 * @method getType()
-	 * @return {String} 'Firefox'
-	 */
-	FirefoxPlatform.prototype.getType = function() {
-		return FirefoxPlatform.getType();
-	},
+		/**
+		 * @method getType()
+		 * @return {String} 'Firefox'
+		 */
+		FirefoxPlatform.prototype.getType = function() {
+			return FirefoxPlatform.getType();
+		},
 
-	/**
-	 * @method isSupported
-	 * @return {Boolean} true
-	 */
-	FirefoxPlatform.prototype.isSupported = function() {
-		return true;
-	};
+		/**
+		 * @method isSupported
+		 * @return {Boolean} true
+		 */
+		FirefoxPlatform.prototype.isSupported = function() {
+			return true;
+		};
 
 	/**
 	 * Does nothing on the Firefox platform
@@ -1011,41 +1011,42 @@
 		}
 	},
 
-	/**
-	 * Applies deadzone and maximization.
-	 *
-	 * You can change the thresholds via deadzone and maximizeThreshold members.
-	 *
-	 * @method _applyDeadzoneMaximize
-	 * @param {Number} value Value to modify
-	 * @param {Number} [deadzone] Deadzone to apply
-	 * @param {Number} [maximizeThreshold] From which value to maximize value
-	 * @private
-	 */
-	Gamepad.prototype._applyDeadzoneMaximize = function(
-		value,
-		deadzone,
-		maximizeThreshold) {
-		deadzone = typeof(deadzone) !== 'undefined' ? deadzone : this.deadzone;
-		maximizeThreshold = typeof(maximizeThreshold) !== 'undefined' ? maximizeThreshold : this.maximizeThreshold;
+		/**
+		 * Applies deadzone and maximization.
+		 *
+		 * You can change the thresholds via deadzone and maximizeThreshold members.
+		 *
+		 * @method _applyDeadzoneMaximize
+		 * @param {Number} value Value to modify
+		 * @param {Number} [deadzone] Deadzone to apply
+		 * @param {Number} [maximizeThreshold] From which value to maximize value
+		 * @private
+		 */
+		Gamepad.prototype._applyDeadzoneMaximize = function(
+			value,
+			deadzone,
+			maximizeThreshold) {
+			deadzone = typeof(deadzone) !== 'undefined' ? deadzone : this.deadzone;
+			maximizeThreshold = typeof(maximizeThreshold) !== 'undefined' ? maximizeThreshold : this.maximizeThreshold;
 
-		if (value >= 0) {
-			if (value < deadzone) {
-				value = 0;
-			} else if (value > maximizeThreshold) {
-				value = 1;
+			if (value >= 0) {
+				if (value < deadzone) {
+					value = 0;
+				} else if (value > maximizeThreshold) {
+					value = 1;
+				}
+			} else {
+				if (value > -deadzone) {
+					value = 0;
+				} else if (value < -maximizeThreshold) {
+					value = -1;
+				}
 			}
-		} else {
-			if (value > -deadzone) {
-				value = 0;
-			} else if (value < -maximizeThreshold) {
-				value = -1;
-			}
-		}
 
-		return value;
-	};
+			return value;
+		};
 
 	exports.Gamepad = Gamepad;
 
 })(((typeof(module) !== 'undefined') && module.exports) || window);
+

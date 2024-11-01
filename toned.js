@@ -5,7 +5,7 @@
 function TonedJS(give_window) {
   var toned = {
     /* Object Shenanigans */
-    
+
     // Blindly hand all members of the donor variable to the recipient
     // Ex: give(toned, window);
     giveSup: function(donor, recipient) {
@@ -22,7 +22,7 @@ function TonedJS(give_window) {
           recipient[i] = donor[i];
       return recipient;
     },
-    
+
     // Proliferates all members of the donor to the recipient recursively
     // This is more intelligent than giveSup & giveSub
     proliferate: function(recipient, donor, no_override) {
@@ -41,17 +41,17 @@ function TonedJS(give_window) {
       }
       return recipient;
     },
-    
+
     // Blindly grabs the first key or value of the object, depending on grabkey
     getFirst: function(obj, grabkey) {
       for(var i in obj) return grabkey ? i : obj[i];
     },
-    
+
     // Blindly grabs the last key or value of the object, depending on grabkey
     getLast: function(obj, grabkey) {
       for(var i in obj) {} return grabkey ? i : obj[i];
     },
-    
+
     // Follows a path inside an object recursively
     // Path is ["path", "to", "target"], where num is how far along the path it is
     // Num must be given at start, for performance reasons
@@ -61,10 +61,10 @@ function TonedJS(give_window) {
         return followPath(obj[path[num]], path, ++num);
       return obj;
     },
-    
-    
+
+
     /* HTML Element Manipulations */
-    
+
     // Creates an element, and uses proliferate on all the other arguments
     // * createElement()    // (just returns a new div)
     // * createElement("div", {width: "350px", style: {class: "Toned"}});
@@ -75,11 +75,11 @@ function TonedJS(give_window) {
         proliferate(elem, arguments[i]);
       return elem;
     },
-    
+
     // Simple expressions to add/remove classes
     classAdd: function(me, strin) { me.className += " " + strin; },
     classRemove: function(me, strout) { me.className = me.className.replace(new RegExp(" " + strout, "gm"), ""); },
-    
+
     // Position changing
     elementSetPosition: function(me, left, top) {
       if(left == undefined) left = me.left;
@@ -101,32 +101,32 @@ function TonedJS(give_window) {
       if(!me.top) me.top = Number(me.style.marginLeft.replace("px", ""));
       me.style.marginTop = round(me.top += top) + "px";
     },
-    
+
     // Deletes an element if it's in its parent, or the body
     removeChildSafe: function(child, container) {
       if(!child) return;
       container = container || document.body;
       if(container.contains(child)) container.removeChild(child);
     },
-    
+
     // Attempts to find the soonest parent with this tag
     findParentOfType: function(child, type) {
       var parent = child.parentElement;
       if(!parent || parent.nodeName == type) return parent;
       return findParentType(parent, type);
     },
-    
+
     // Clears all timer events from setTimeout and setInterval
     clearAllTimeouts: function() {
       var id = setTimeout(function() {});
       while(id--) clearTimeout(id);
     },
-    
+
     /* String manipulations */
-    
+
     // Removes leading and trailing whitespace (thanks, IE<=8)
     stringTrim: function(me) {
-      return me.replace(/^\s+|\s+$/g,''); 
+      return me.replace(/^\s+|\s+$/g,'');
     },
     // Similar to arrayOf
     stringOf: function(me, n) {
@@ -145,9 +145,9 @@ function TonedJS(give_window) {
       n = n || 1;
       return str.substr(0,n).toUpperCase() + str.substr(n).toLowerCase();
     },
-    
+
     /* Array manipulations */
-    
+
     // It's nice to have X-dimensional arrays
     ArrayD: function(dim) {
       // 1-dimensionals are easy
@@ -192,7 +192,7 @@ function TonedJS(give_window) {
       }
       return arr;
     },
-    // O(n^2) removal 
+    // O(n^2) removal
     removeDuplicates: function(arr) {
       var output = [],
           me, hasdup,
@@ -210,9 +210,9 @@ function TonedJS(give_window) {
       }
       return output;
     },
-    
+
     /* Number manipulations */
-    
+
     // Converts ('7',3,1) to '117'
     makeDigit: function(num, size, fill) {
       num = String(num);
@@ -233,17 +233,18 @@ function TonedJS(give_window) {
     randInt: function(n) { return floor(Math.random() * (n || 1)); },
     // Positives are true, negatives are false
     signBool: function(n) { return n > 0 ? true : false; },
-    
+
     /* Etcetera */
-    
+
     // It's nice being able log without going through console.. hopefully it gets optimized!
     log: console.log.bind(console),
-    
+
     // Timing
     now: Date.now
   };
-  
+
   if(give_window) toned.giveSub(toned, window);
-  
+
   return toned;
 }
+
