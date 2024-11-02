@@ -49,7 +49,7 @@ function FullScreenMario() {
 
   // With that all set, set the map to World11.
   window.gameon = true;
-  setMap(1,2);
+  setMap(1,1);
 
   log("It took " + (Date.now() - time_start) + " milliseconds to start.");
 }
@@ -115,7 +115,7 @@ function resetGameScreen() {
 function getGameScreen() {
   resetGameScreenPosition(this);
   // Middlex is static and only used for scrolling to the right
-  this.middlex = (this.left + this.right) / 2;
+  this.middlex = (this.left + this.right) / 2 - 60;
   // this.middlex = (this.left + this.right) / 3;
 
   // This is the bottom of the screen - water, pipes, etc. go until here
