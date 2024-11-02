@@ -49,7 +49,7 @@ function FullScreenMario() {
 
   // With that all set, set the map to World11.
   window.gameon = true;
-  setMap(1,1);
+  setMap(1,2);
 
   log("It took " + (Date.now() - time_start) + " milliseconds to start.");
 }

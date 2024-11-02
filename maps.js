@@ -111,10 +111,16 @@ function PreThing(xloc, yloc, type) {
 /* Map Setting */
 // Resets the board and starts
 function setMap(one, two) {
+  console.log("setMap 114");
+
   if(!gameon) return;
+
+  console.log("setMap 118");
 
   // Unless it's ok to, kill the editor
   if(!window.canedit && window.editing) editorClose(true);
+
+  console.log("setMap 123");
 
   // Remove random stuff
   removeRandomDisplays();
