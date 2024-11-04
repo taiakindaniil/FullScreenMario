@@ -7,7 +7,7 @@
     <link href="mario.css?v=3.0" rel="stylesheet">
     <link href="Fonts/stylesheet.css?v=3.0" rel="stylesheet">
 
-    <script src="assets/jquery.min.js"></script>
+    <!-- <script src="assets/jquery.min.js"></script> -->
 
     <script src="data.js?v=4.1.28"></script>
     <script src="editor.js?v=3.0"></script>
@@ -27,8 +27,6 @@
     <script src="src/AudioPlayr/AudioPlayr.js?v=3.0"></script>
     <script src="src/TimeHandlr/TimeHandlr.js?v=3.0"></script>
     <script src="src/QuadsKeepr/QuadsKeepr.js?v=3.0"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@telegram-apps/sdk/dist/index.iife.js"></script>
 
     <style>
         #paused {
@@ -119,14 +117,15 @@
         } */
     </style>
     <script>
-            var sdk = window.telegramApps.sdk;
+        
+            // var sdk = window.telegramApps.sdk;
             // console.log(sdk);
-            console.log(sdk.retrieveLaunchParams());
-            const hash = window.location.hash.slice(1); // tgWebAppData=...&tgWebAppVersion=6.2&...
+            // console.log(sdk.retrieveLaunchParams());
+            // const hash = window.location.hash.slice(1); // tgWebAppData=...&tgWebAppVersion=6.2&...
 
-            const params = new URLSearchParams(hash);
+            // const params = new URLSearchParams(hash);
 
-            var is_mobile = params.get('tgWebAppPlatform') == 'android' || params.get('tgWebAppPlatform') == 'ios';
+            // var is_mobile = params.get('tgWebAppPlatform') == 'android' || params.get('tgWebAppPlatform') == 'ios';
             function iOS() {
                 return [
                         'iPad Simulator',
@@ -142,9 +141,27 @@
             const is_ios = iOS();
     </script>
 </head>
-<body onload="FullScreenMario()" style="position: relative;">
+<body style="position: relative;">
 </body>
 <div id="paused"><span>UNPAUSE</span></div>
 <div id="log" style="width:300px;overflow:auto"></div>
+<script src="https://unpkg.com/@telegram-apps/sdk@1.0.0/dist/index.iife.js"></script>
+<script>
+    var is_mobile = true;
+    window.onload = () => {
+        try {
+            var { retrieveLaunchParams, postEvent } = window.telegramApps.sdk;
+            var lp = retrieveLaunchParams();
+
+            is_mobile = lp.platform == 'android' || lp.platform == 'ios';
+            
+            postEvent('web_app_expand');
+        } catch {
+            console.log('You are not in the Telegram app.');
+        }
+
+        FullScreenMario();
+    };
+</script>
 </html>
 

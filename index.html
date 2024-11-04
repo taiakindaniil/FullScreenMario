@@ -12,7 +12,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link href="default.css" rel="stylesheet">
   <link href="Fonts/stylesheet.css" rel="stylesheet">
-	<script src="ui.js"></script>
+	<!-- <script src="ui.js"></script> -->
   <style>
     html, body {margin: 0; overflow: hidden; touch-action: manipulation; }
   </style>
@@ -65,8 +65,10 @@
   <script src="https://unpkg.com/@telegram-apps/sdk@1.0.0/dist/index.iife.js"></script>
   <script>
     (function() {
-      var { retrieveLaunchParams, postEvent } = window.telegramApps.sdk;
-      var lp = retrieveLaunchParams();
+      // var { retrieveLaunchParams, postEvent } = window.telegramApps.sdk;
+      // var lp = retrieveLaunchParams();
+
+      // var is_mobile = true;
 
       // // Some versions of Telegram don't need the classes above.
       // if (['macos', 'tdesktop', 'weba', 'web', 'webk'].includes(lp.platform)) {
@@ -74,7 +76,7 @@
       // }
 
       // // Expand the application.
-      postEvent('web_app_expand');
+      // postEvent('web_app_expand');
 
       // document.body.classList.add('mobile-body');
       // document.getElementById('wrap').classList.add('mobile-wrap');
