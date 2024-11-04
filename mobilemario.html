@@ -28,6 +28,8 @@
     <script src="src/TimeHandlr/TimeHandlr.js?v=3.0"></script>
     <script src="src/QuadsKeepr/QuadsKeepr.js?v=3.0"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/@telegram-apps/sdk/dist/index.iife.js"></script>
+
     <style>
         #paused {
             background: rgba(0,0,0,.3);
@@ -112,28 +114,36 @@
         #mobile-controls #move-fire span {
             background-image: url(./assets/img/fire.png);
         }
-        #explanation {
+        /* #explanation {
             display: none;
-        }
+        } */
     </style>
     <script>
-        var is_mobile = true;
-        function iOS() {
-            return [
-                    'iPad Simulator',
-                    'iPhone Simulator',
-                    'iPod Simulator',
-                    'iPad',
-                    'iPhone',
-                    'iPod'
-                ].includes(navigator.platform)
-                // iPad on iOS 13 detection
-                || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
-        }
-        const is_ios = iOS();
+            // var sdk = window.telegramApps.sdk;
+            // console.log(sdk);
+            // console.log(sdk.retrieveLaunchParams());
+            const hash = window.location.hash.slice(1); // tgWebAppData=...&tgWebAppVersion=6.2&...
+
+            const params = new URLSearchParams(hash);
+
+            var is_mobile = params.get('tgWebAppPlatform') == 'android' || params.get('tgWebAppPlatform') == 'ios';
+            function iOS() {
+                return [
+                        'iPad Simulator',
+                        'iPhone Simulator',
+                        'iPod Simulator',
+                        'iPad',
+                        'iPhone',
+                        'iPod'
+                    ].includes(navigator.platform)
+                    // iPad on iOS 13 detection
+                    || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+            }
+            const is_ios = iOS();
     </script>
 </head>
-<body onload="FullScreenMario()" style="position: relative;"></body>
+<body onload="FullScreenMario()" style="position: relative;">
+</body>
 <div id="paused"><span>UNPAUSE</span></div>
 <div id="log" style="width:300px;overflow:auto"></div>
 </html>

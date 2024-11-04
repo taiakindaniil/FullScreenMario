@@ -105,8 +105,6 @@ function applyNewJs() {
     document.body.dispatchEvent(keys);
   });
 
-  document.getElementById('data_display').style = "width:100%;font-size:13px";
-
   //document.getElementById('log').innerText = 'applyNewJs');
 
   // var canvas = document.getElementsByTagName('canvas')[0];
@@ -164,6 +162,8 @@ function setDataDisplay() {
     updateDataElement(data[elems[i]]);
   }
   body.appendChild(data.display);
+
+  document.getElementById('data_display').style = "width:100%;font-size:13px";
 
   if (is_mobile) {
     applyNewJs();

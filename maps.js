@@ -387,6 +387,8 @@ function goToTransport(transport) {
   // Goes to a new Location
   else shiftToLocation(map.locs[transport]);
 
+  document.getElementById('data_display').style = "width:100%;font-size:13px";
+
   if (is_mobile) {
     applyNewJs();
   }
@@ -1138,15 +1140,18 @@ function World11(map) {
       greeter += "  </p>";
       greeter += "</div>";
       greeter += "<div id='boo' style='text-align:right;color:#ffcccc;margin-top:-7px;width:350px;height:35px;'>&copy;1985 NINTENDO</div>";
-      greeter += "<p id='explanation' style='text-align:center;<!--/*text-shadow:2px 2px 1px black;*/-->margin-left:7px;'>";
-      greeter += "  Move: Arrows/WASD";
-      greeter += "  <br>";
-      greeter += "  Fire/Sprint: Shift/CTRL";
-      greeter += "  <br>";
-      greeter += "  Pause/Mute: P/M ";
-      //greeter += "  <br>";
-      //greeter += "  TOP- " + (localStorage.highscore || "000000");
-      greeter += "</p>";
+      
+      if (is_mobile == false) {
+        greeter += "<p id='explanation' style='width: 290px; text-align:left;<!--/*text-shadow:2px 2px 1px black;*/-->margin-left:7px;'>";
+        greeter += "  Move: Arrows/WASD";
+        greeter += "  <br>";
+        greeter += "  Fire/Sprint: Shift/CTRL";
+        // greeter += "  <br>";
+        // greeter += "  Pause/Mute: P/M ";
+        //greeter += "  <br>";
+        //greeter += "  TOP- " + (localStorage.highscore || "000000");
+        greeter += "</p>";
+      }
       pushPreText(greeter, 20, 91);
 
       pushPrePattern("backreg", 0, 0, 5);
