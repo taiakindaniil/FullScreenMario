@@ -119,9 +119,9 @@
         } */
     </style>
     <script>
-            // var sdk = window.telegramApps.sdk;
+            var sdk = window.telegramApps.sdk;
             // console.log(sdk);
-            // console.log(sdk.retrieveLaunchParams());
+            console.log(sdk.retrieveLaunchParams());
             const hash = window.location.hash.slice(1); // tgWebAppData=...&tgWebAppVersion=6.2&...
 
             const params = new URLSearchParams(hash);
