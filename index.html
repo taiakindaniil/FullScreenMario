@@ -1,172 +1,82 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
+
 <html lang="en-us">
+
 <head>
-    <meta charset="utf-8">
-    <title>Full Screen Mario</title>
+	<meta charset="utf-8">
+  <!-- Good for vertical, bad for horizontal on mobile -->
+  <meta
+    name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+  >
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="default.css" rel="stylesheet">
+  <link href="Fonts/stylesheet.css" rel="stylesheet">
 
-    <meta
-        name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-    >
-
-    <link href="mario.css?v=3.0" rel="stylesheet">
-    <link href="Fonts/stylesheet.css?v=3.0" rel="stylesheet">
-
-    <!-- <script src="assets/jquery.min.js"></script> -->
-
-    <script src="data.js?v=4.1.28"></script>
-    <script src="editor.js?v=3.0"></script>
-    <script src="gamepad.js?v=3.0"></script>
-    <script src="generator.js?v=3.0"></script>
-    <script src="library.js?v=3.0"></script>
-    <script src="load.js?v=3.0"></script>
-    <script src="mario.js?v=3.0.6"></script>
-    <script src="maps.js?v=3.7"></script>
-    <script src="sprites.js?v=3.0"></script>
-    <script src="things.js?v=3.0"></script>
-    <script src="toned.js?v=3.0"></script>
-    <script src="triggers.js?v=3.0.16"></script>
-    <script src="upkeep.js?v=3.0"></script>
-    <script src="utility.js?v=3.0"></script>
-
-    <script src="src/AudioPlayr/AudioPlayr.js?v=3.0"></script>
-    <script src="src/TimeHandlr/TimeHandlr.js?v=3.0"></script>
-    <script src="src/QuadsKeepr/QuadsKeepr.js?v=3.0"></script>
-
-    <style>
-        #paused {
-            background: rgba(0,0,0,.3);
-            font-size: 24px;
-            text-transform: uppercase;
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            line-height: 1.5em;
-        }
-        #mobile-controls .move {
-            width: 64px;
-            height: 64px;
-            position: absolute;
-            z-index: 98;
-        }
-        #mobile-controls .move span {
-            width: 64px;
-            height: 64px;
-            background-color: #fff;
-            background-size: 100%;
-            color: #000;
-            font-weight: bold;
-            line-height: 32px;
-            text-align: center;
-            border-radius: 50%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: auto;
-        }
-        #mobile-controls #move-left,
-        #mobile-controls #move-right {
-            top: 450px;
-            height: 80px;
-            cursor: pointer;
-        }
-        #mobile-controls #move-left {
-            left: 20px;
-        }
-        #mobile-controls #move-left span {
-            background-image: url(./assets/img/arrow_left.png);
-        }
-        #mobile-controls #move-right {
-            left: 95px;
-            width: 57px;
-        }
-        #mobile-controls #move-right span {
-            background-image: url(./assets/img/arrow_right.png);
-        }
-        #mobile-controls #move-top,
-        #mobile-controls #move-bottom {
-            right: 20px;
-            width: 62px;
-            cursor: pointer;
-        }
-        #mobile-controls #move-top {
-            top: 435px;
-        }
-        #mobile-controls #move-top span {
-            background-image: url(./assets/img/arrow_top.png);
-        }
-        #mobile-controls #move-bottom {
-            top: 505px;
-        }
-        #mobile-controls #move-bottom span {
-            background-image: url(./assets/img/arrow_bottom.png);
-        }
-        #mobile-controls #move-fire {
-            display: none;
-            top: 454px;
-            right: 76px;
-        }
-        #mobile-controls #move-fire span {
-            background-image: url(./assets/img/fire.png);
-        }
-        /* #explanation {
-            display: none;
-        } */
-    </style>
-    <script>
-        
-            // var sdk = window.telegramApps.sdk;
-            // console.log(sdk);
-            // console.log(sdk.retrieveLaunchParams());
-            // const hash = window.location.hash.slice(1); // tgWebAppData=...&tgWebAppVersion=6.2&...
-
-            // const params = new URLSearchParams(hash);
-
-            // var is_mobile = params.get('tgWebAppPlatform') == 'android' || params.get('tgWebAppPlatform') == 'ios';
-            function iOS() {
-                return [
-                        'iPad Simulator',
-                        'iPhone Simulator',
-                        'iPod Simulator',
-                        'iPad',
-                        'iPhone',
-                        'iPod'
-                    ].includes(navigator.platform)
-                    // iPad on iOS 13 detection
-                    || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
-            }
-            const is_ios = iOS();
-    </script>
+  <script src="ui.js"></script>
 </head>
-<body style="position: relative;">
+
+<body onload="start()">
+  <!-- <div id="wrap"> -->
+    <!-- <div id="content"> -->
+      
+      <!-- Game itself -->
+      <iframe onload="this.contentWindow.focus()" id="game" style="margin-top: 0; height: 100%;" src="mobilemario.html"></iframe>
+
+      <!-- After the game (retracts as needed) -->
+      <!-- <div id="after"> -->
+      
+        <!-- Level Editor popup -->
+        <!-- <div id="out_editor" class="bar1"> -->
+          <!-- <div class="label">- Level Editor -</div> -->
+          <!-- <div id="in_editor" class="expander"></div> -->
+        <!-- </div> -->
+        
+        <!-- Map Selector popup -->
+        <!-- <div id="out_mapselect" class="bar1"> -->
+          <!-- <div class="label">- Map Select -</div> -->
+          <!-- <div id="in_mapselect" class="expander"></div> -->
+        <!-- </div> -->
+        
+        <!-- Options popup -->
+        <!-- <div id="out_options" class="bar1"> -->
+          <!-- <div class="label">- Options -</div> -->
+          <!-- <div id="in_options" class="expander"></div> -->
+        <!-- </div> -->
+        
+        <!-- Key Mapping popup -->
+        <!-- <div id="out_keymapping" class="bar1"> -->
+          <!-- <div class="label">- Keys Mapping -</div> -->
+          <!-- <div id="in_keymapping" class="expander"></div> -->
+        <!-- </div> -->
+        
+      <!-- </div> -->
+    <!-- </div> -->
+  <!-- </div> -->
+  <!-- <script src="https://unpkg.com/@telegram-apps/sdk@1.0.0/dist/index.iife.js"></script> -->
+  <script>
+    (function() {
+
+      // document.getElementById('game').is_mobile = false;
+
+      // var { retrieveLaunchParams, postEvent } = window.telegramApps.sdk;
+      // var lp = retrieveLaunchParams();
+
+      // var is_mobile = true;
+
+      // // Some versions of Telegram don't need the classes above.
+      // if (['macos', 'tdesktop', 'weba', 'web', 'webk'].includes(lp.platform)) {
+      //   return;
+      // }
+
+      // // Expand the application.
+      // postEvent('web_app_expand');
+
+      // document.body.classList.add('mobile-body');
+      // document.getElementById('wrap').classList.add('mobile-wrap');
+      // document.getElementById('content').classList.add('mobile-content');
+    })();
+  </script>
 </body>
-<div id="paused"><span>UNPAUSE</span></div>
-<div id="log" style="width:300px;overflow:auto"></div>
-<script src="https://unpkg.com/@telegram-apps/sdk@1.0.0/dist/index.iife.js"></script>
-<script>
-    var is_mobile = true;
-    window.onload = () => {
-        try {
-            var { retrieveLaunchParams, postEvent } = window.telegramApps.sdk;
-            var lp = retrieveLaunchParams();
 
-            is_mobile = lp.platform == 'android' || lp.platform == 'ios';
-            
-            postEvent('web_app_expand');
-        } catch {
-            console.log('You are not in the Telegram app.');
-        }
-
-        FullScreenMario();
-    };
-</script>
 </html>
-
